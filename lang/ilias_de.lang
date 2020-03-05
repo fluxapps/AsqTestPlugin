@@ -1,0 +1,27 @@
+obj_xast#:#AssessmentTest
+obj_xast_duplicate#:#AssessmentTest kopieren
+objs_xast#:#AssessmentTest's
+objs_xast_duplicate#:#AssessmentTest's kopieren
+rbac_create_xast#:#AssessmentTest anlegen
+xast_add#:#Hinzufügen
+xast_delete#:#Löschen
+xast_edit_permission#:#Rechte bearbeiten
+xast_new#:#AssessmentTest anlegen
+xast_read#:#Lesen
+xast_visible#:#Sichtbar
+xast_write#:#Bearbeiten
+config_configuration#:#Konfiguration
+config_configuration_saved#:#Konfiguration gespeichert
+config_save#:#Speichern
+object_manage_contents#:#Bearbeiten
+object_offline#:#Offline
+object_permission_denied#:#Zugriff verweigert
+object_show_contents#:#Inhalte
+object_status#:#Status
+settings_cancel#:#Abbrechen
+settings_description#:#Beschreibung
+settings_online#:#Online
+settings_save#:#Speichern
+settings_saved#:#Einstellungen gespeichert
+settings_settings#:#Einstellungen
+settings_title#:#Titel

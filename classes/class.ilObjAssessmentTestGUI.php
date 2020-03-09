@@ -8,6 +8,7 @@ use \ilAsqQuestionAuthoringGUI;
 use ILIAS\Services\AssessmentQuestion\PublicApi\Common\AuthoringContextContainer;
 use ILIAS\AssessmentQuestion\DomainModel\QuestionDto;
 use ILIAS\AssessmentQuestion\UserInterface\Web\AsqGUIElementFactory;
+use ILIAS\AssessmentQuestion\Infrastructure\Setup\sql\SetupDatabase;
 
 /**
  * Class ilObjAssessmentTestGUI
@@ -37,6 +38,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
     const CMD_SETTINGS = "settings";
     const CMD_SETTINGS_STORE = "settingsStore";
     const CMD_SHOW_CONTENTS = "showTest";
+    const CMD_INIT_ASQ = "initASQ";
     const LANG_MODULE_OBJECT = "object";
     const LANG_MODULE_SETTINGS = "settings";
     const TAB_CONTENTS = "contents";
@@ -101,6 +103,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
                     case self::CMD_SHOW_QUESTIONS:
                     case self::CMD_SETTINGS:
                     case self::CMD_SETTINGS_STORE:
+                    case self::CMD_INIT_ASQ:
                         // Write commands
                         if (!ilObjAssessmentTestAccess::hasWriteAccess()) {
                             ilObjAssessmentTestAccess::redirectNonAccess($this);
@@ -216,6 +219,11 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
         $button->setUrl($link->getAction());
         $button->setCaption($link->getLabel(), false);
         self::dic()->toolbar()->addButtonInstance($button);
+
+        $button = ilLinkButton::getInstance();
+        $button->setUrl(self::dic()->ctrl()->getLinkTargetByClass(self::class, self::CMD_INIT_ASQ));
+        $button->setCaption(self::plugin()->translate("init_asq"), false);
+        self::dic()->toolbar()->addButtonInstance($button);
         
         $question_table = new ilTable2GUI($this);
         $question_table->setRowTemplate("tpl.questions_row.html", "Customizing/global/plugins/Services/Repository/RepositoryObject/AssessmentTest");
@@ -247,6 +255,11 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
         }
         
         return $assoc_array;
+    }
+    
+    protected function initASQ() {
+        $setup_database = new SetupDatabase();
+        $setup_database->run();
     }
     
     /**

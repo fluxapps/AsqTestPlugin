@@ -4,10 +4,10 @@ use srag\Plugins\AssessmentTest\ObjectSettings\ObjectSettingsFormGUI;
 use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
 use srag\DIC\AssessmentTest\DICTrait;
 use ILIAS\Services\AssessmentQuestion\PublicApi\Authoring\AuthoringQuestion;
-use ilAsqQuestionAuthoringGUI;
+use \ilAsqQuestionAuthoringGUI;
 use ILIAS\Services\AssessmentQuestion\PublicApi\Common\AuthoringContextContainer;
-use ILIAS\Services\AssessmentQuestion\PublicApi\Factory\QuestionService;
 use ILIAS\AssessmentQuestion\DomainModel\QuestionDto;
+use ILIAS\AssessmentQuestion\UserInterface\Web\AsqGUIElementFactory;
 
 /**
  * Class ilObjAssessmentTestGUI
@@ -214,7 +214,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
         }, self::dic()->ctrl()->getCallHistory()));
         $button = ilLinkButton::getInstance();
         $button->setUrl($link->getAction());
-        $button->setCaption($link->getLabel());
+        $button->setCaption($link->getLabel(), false);
         self::dic()->toolbar()->addButtonInstance($button);
         
         $question_table = new ilTable2GUI($this);
@@ -237,7 +237,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
             $data = $question_dto->getData();
             
             $question_array[self::COL_TITLE] = is_null($data) ? self::VAL_NO_TITLE : $data->getTitle() ?? self::VAL_NO_TITLE;
-            $question_array[self::COL_TYPE] = $question_dto->getLegacyData()->getAnswerTypeId();
+            $question_array[self::COL_TYPE] = AsqGUIElementFactory::getQuestionTypes()[$question_dto->getLegacyData()->getAnswerTypeId()];
             $question_array[self::COL_AUTHOR] = is_null($data) ? '' : $data->getAuthor();
             $question_array[self::COL_EDITLINK] = AuthoringQuestion::getEditLink($question_dto->getId(), array_map(function($item) {
                 return $item['class'];
@@ -299,7 +299,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
      */
     protected function setTabs()/*: void*/
     {
-        self::dic()->tabs()->addTab(self::TAB_QUESTIONS, self::plugin()->translate("show_contents", self::LANG_MODULE_OBJECT), self::dic()->ctrl()
+        self::dic()->tabs()->addTab(self::TAB_CONTENTS, self::plugin()->translate("show_contents", self::LANG_MODULE_OBJECT), self::dic()->ctrl()
             ->getLinkTarget($this, self::CMD_SHOW_CONTENTS));
 
         if (ilObjAssessmentTestAccess::hasWriteAccess()) {

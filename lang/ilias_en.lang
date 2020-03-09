@@ -1,3 +1,8 @@
+create_question#:#Create Question
+header_title#:#Title
+header_type#:#Type
+header_creator#:#Creator
+object_questions#:#Questions
 obj_xast#:#AssessmentTest
 obj_xast_duplicate#:#Copy AssessmentTest
 objs_xast#:#AssessmentTest's

@@ -68,7 +68,7 @@ class ObjectSettingsFormGUI extends PropertyFormGUI
     {
         $this->addCommandButton(ilObjAssessmentTestGUI::CMD_SETTINGS_STORE, self::plugin()->translate("save", self::LANG_MODULE));
 
-        $this->addCommandButton(ilObjAssessmentTestGUI::CMD_MANAGE_CONTENTS, self::plugin()->translate("cancel", self::LANG_MODULE));
+        $this->addCommandButton(ilObjAssessmentTestGUI::CMD_SHOW_QUESTIONS, self::plugin()->translate("cancel", self::LANG_MODULE));
     }
 
 

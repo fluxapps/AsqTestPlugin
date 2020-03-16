@@ -30,6 +30,10 @@ class AssessmentResultRepository extends AbstractEventSourcedAggregateRepository
         $this->event_store = new AssessmentResultEventStore();
     }
     
+    public function getResultByName(string $name, int $user_id) : AssessmentResult {
+        return null;
+    }
+    
     /**
      * @return EventStore
      */

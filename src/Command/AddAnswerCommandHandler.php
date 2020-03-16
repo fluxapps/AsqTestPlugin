@@ -4,6 +4,8 @@ namespace srag\Plugins\AssessmentTest\Command;
 
 use srag\CQRS\Command\CommandContract;
 use srag\CQRS\Command\CommandHandlerContract;
+use srag\Plugins\AssessmentTest\DomainModel\AssessmentResult;
+use srag\Plugins\AssessmentTest\DomainModel\AssessmentResultRepository;
 
 /**
  * Class AddAnswerCommandHandler
@@ -19,6 +21,11 @@ class AddAnswerCommandHandler implements CommandHandlerContract {
      */
     public function handle(CommandContract $command)
     {
+        /** @var $assessment_result AssessmentResult */
+        $assessment_result = AssessmentResultRepository::getInstance()->getResultByName($command->getAssessmentName(), $command->getInitiatingUserId());
         
+        $assessment_result->setAnswer($command->getQuestionId(), $command->getAnswer(), $command->getInitiatingUserId());
+        
+        AssessmentResultRepository::getInstance()->save($assessment_result);
     }
 }

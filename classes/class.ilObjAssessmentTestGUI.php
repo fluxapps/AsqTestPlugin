@@ -1,14 +1,13 @@
 <?php
 
+use ILIAS\AssessmentQuestion\DomainModel\QuestionDto;
+use ILIAS\AssessmentQuestion\Gateway\Common\AuthoringContextContainer;
+use ILIAS\AssessmentQuestion\Infrastructure\Setup\sql\SetupDatabase;
+use ILIAS\AssessmentQuestion\UserInterface\Web\AsqGUIElementFactory;
+use srag\DIC\AssessmentTest\DICTrait;
 use srag\Plugins\AssessmentTest\ObjectSettings\ObjectSettingsFormGUI;
 use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
-use srag\DIC\AssessmentTest\DICTrait;
-use ILIAS\Services\AssessmentQuestion\PublicApi\Authoring\AuthoringQuestion;
-use \ilAsqQuestionAuthoringGUI;
-use ILIAS\Services\AssessmentQuestion\PublicApi\Common\AuthoringContextContainer;
-use ILIAS\AssessmentQuestion\DomainModel\QuestionDto;
-use ILIAS\AssessmentQuestion\UserInterface\Web\AsqGUIElementFactory;
-use ILIAS\AssessmentQuestion\Infrastructure\Setup\sql\SetupDatabase;
+use ILIAS\AssessmentQuestion\Gateway\AsqGateway;
 
 /**
  * Class ilObjAssessmentTestGUI
@@ -212,7 +211,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
     {
         self::dic()->tabs()->activateTab(self::TAB_QUESTIONS);
         
-        $link = AuthoringQuestion::getCreationLink(array_map(function($item) {
+        $link = AsqGateway::get()->link()->getCreationLink(array_map(function($item) {
             return $item['class'];
         }, self::dic()->ctrl()->getCallHistory()));
         $button = ilLinkButton::getInstance();
@@ -231,7 +230,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
         $question_table->addColumn(self::plugin()->translate("header_type"), self::COL_TYPE);
         $question_table->addColumn(self::plugin()->translate("header_creator"), self::COL_AUTHOR);
         
-        $questions = self::dic()->dic()->assessment()->question()->getQuestionsOfContainer($this->object->id);
+        $questions = AsqGateway::get()->question()->getQuestionsOfContainer($this->object->id);
         $question_table->setData($this->getQuestionsOfContainerAsAssocArray($questions));
         
         $this->show($question_table->getHTML());
@@ -247,7 +246,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
             $question_array[self::COL_TITLE] = is_null($data) ? self::VAL_NO_TITLE : $data->getTitle() ?? self::VAL_NO_TITLE;
             $question_array[self::COL_TYPE] = AsqGUIElementFactory::getQuestionTypes()[$question_dto->getLegacyData()->getAnswerTypeId()];
             $question_array[self::COL_AUTHOR] = is_null($data) ? '' : $data->getAuthor();
-            $question_array[self::COL_EDITLINK] = AuthoringQuestion::getEditLink($question_dto->getId(), array_map(function($item) {
+            $question_array[self::COL_EDITLINK] = AsqGateway::get()->link()->getEditLink($question_dto->getId(), array_map(function($item) {
                 return $item['class'];
             }, self::dic()->ctrl()->getCallHistory()))->getAction();
             

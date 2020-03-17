@@ -1,0 +1,6 @@
+[submodule "lib-cqrs"]
+	path = lib-cqrs
+	url = ../../Libraries/CQRS.git
+[submodule "lib-asq"]
+	path = lib-asq
+	url = ../../Libraries/AssessmentQuestion.git

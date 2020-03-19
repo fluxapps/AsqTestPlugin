@@ -4,7 +4,6 @@ namespace srag\Plugins\AssessmentTest\Command;
 
 use srag\CQRS\Command\AbstractCommand;
 use srag\Plugins\AssessmentTest\DomainModel\AssessmentContext;
-use srag\CQRS\Aggregate\DomainObjectId;
 
 /**
  * Class StartAssessmentCommand
@@ -18,24 +17,34 @@ class StartAssessmentCommand extends AbstractCommand {
     /**
      * @var AssessmentContext
      */
-    public $context;
+    protected $context;
     
     /**
      * @var string[]
      */
-    public $question_ids;
+    protected $question_ids;
+
+    /**
+     * @var string
+     */
+    protected $uuid;
     
     /**
      * @param int $user_id
      * @param AssessmentContext $context
      * @param array $question_ids
      */
-    public function __construct(int $user_id, AssessmentContext $context, array $question_ids) {
+    public function __construct(string $uuid, int $user_id, AssessmentContext $context, array $question_ids) {
+        $this->uuid = $uuid;
         $this->context = $context;
         $this->question_ids = $question_ids;
         parent::__construct($user_id);
     }
    
+    public function getUuid() : string {
+        return $this->uuid;
+    }
+    
     /**
      * @return AssessmentContext
      */

@@ -36,11 +36,15 @@ class AssessmentResultInitiatedEvent extends AbstractDomainEvent {
      * @param AssessmentContext $context
      * @param array $questions
      */
-    public function __construct(DomainObjectId $aggregate_id, int $initiating_user_id, AssessmentContext $context, array $questions) 
+    public function __construct(DomainObjectId $aggregate_id, 
+                                ilDateTime $occured_on, 
+                                int $initiating_user_id, 
+                                AssessmentContext $context = null, 
+                                array $questions = null)
     {
         $this->context = $context;
         $this->questions = $questions;
-        parent::__construct($aggregate_id, new ilDateTime(), $initiating_user_id);
+        parent::__construct($aggregate_id, $occured_on, $initiating_user_id);
     }
 
     /**
@@ -71,6 +75,6 @@ class AssessmentResultInitiatedEvent extends AbstractDomainEvent {
     {
         $body = json_decode($event_body, true);
         $this->questions = $body[self::KEY_QUESTIONS];
-        $this->context = AbstractValueObject::deserialize($body[self::KEY_CONTEXT]);
+        $this->context = AbstractValueObject::createFromArray($body[self::KEY_CONTEXT]);
     }
 }

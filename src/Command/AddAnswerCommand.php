@@ -3,7 +3,7 @@
 namespace srag\Plugins\AssessmentTest\Command;
 
 use srag\CQRS\Command\AbstractCommand;
-use ILIAS\AssessmentQuestion\DomainModel\Answer\Answer;
+use srag\asq\Domain\Model\Answer\Answer;
 
 /**
  * Class AddAnswerCommand
@@ -17,7 +17,7 @@ class AddAnswerCommand extends AbstractCommand {
     /**
      * @var string
      */
-    public $assessment_name;
+    public $result_uuid;
     
     /**
      * @var string
@@ -34,8 +34,8 @@ class AddAnswerCommand extends AbstractCommand {
      * @param string $question_id
      * @param Answer $answer
      */
-    public function __construct(string $assessment_name, int $user_id, string $question_id, Answer $answer) {
-        $this->assessment_name = $assessment_name;
+    public function __construct(string $result_uuid, int $user_id, string $question_id, Answer $answer) {
+        $this->result_uuid = $result_uuid;
         $this->question_id = $question_id;
         $this->answer = $answer;
         parent::__construct($user_id);
@@ -44,14 +44,9 @@ class AddAnswerCommand extends AbstractCommand {
     /**
      * @return string
      */
-    public function getAssessmentName() : string
+    public function getResultUuid() : string
     {
-        return $this->assessment_name;
-    }
-    
-    public function getUserId() : int 
-    {
-        return $this->user_id;
+        return $this->result_uuid;
     }
     
     /**

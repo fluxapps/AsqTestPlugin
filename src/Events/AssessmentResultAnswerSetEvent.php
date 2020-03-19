@@ -2,11 +2,11 @@
 
 namespace srag\Plugins\AssessmentTest\Events;
 
-use ILIAS\AssessmentQuestion\DomainModel\Answer\Answer;
-use srag\CQRS\Event\AbstractDomainEvent;
-use srag\CQRS\Aggregate\DomainObjectId;
 use ilDateTime;
 use srag\CQRS\Aggregate\AbstractValueObject;
+use srag\CQRS\Aggregate\DomainObjectId;
+use srag\CQRS\Event\AbstractDomainEvent;
+use srag\asq\Domain\Model\Answer\Answer;
 
 /**
  * Class AssessmentResultAnswerSetEvent
@@ -30,10 +30,10 @@ class AssessmentResultAnswerSetEvent extends AbstractDomainEvent {
      */
     protected $answer;
     
-    public function __construct(DomainObjectId $aggregate_id, int $initiating_user_id, string $question_id, Answer $answer) {
+    public function __construct(DomainObjectId $aggregate_id, ilDateTime $occured_on, int $initiating_user_id, string $question_id = null, Answer $answer = null) {
         $this->question_id = $question_id;
         $this->answer = $answer;
-        parent::__construct($aggregate_id, new ilDateTime(), $initiating_user_id);
+        parent::__construct($aggregate_id, $occured_on, $initiating_user_id);
     }
     
     /**
@@ -64,6 +64,6 @@ class AssessmentResultAnswerSetEvent extends AbstractDomainEvent {
     {
         $body = json_decode($event_body, true);
         $this->question_id = $body[self::KEY_QUESTION_ID];
-        $this->answer = AbstractValueObject::deserialize($body[self::KEY_ANSWER]);
+        $this->answer = AbstractValueObject::createFromArray($body[self::KEY_ANSWER]);
     }
 }

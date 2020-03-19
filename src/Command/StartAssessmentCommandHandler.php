@@ -6,6 +6,7 @@ use srag\CQRS\Command\CommandContract;
 use srag\CQRS\Command\CommandHandlerContract;
 use srag\Plugins\AssessmentTest\DomainModel\AssessmentResult;
 use srag\Plugins\AssessmentTest\DomainModel\AssessmentResultRepository;
+use srag\CQRS\Aggregate\DomainObjectId;
 
 /**
  * Class StartAssessmentCommandHandler
@@ -22,6 +23,7 @@ class StartAssessmentCommandHandler implements CommandHandlerContract {
     public function handle(CommandContract $command)
     {
         $assessment_result = AssessmentResult::create(
+            new DomainObjectId($command->getUuid()),
             $command->getContext(),
             $command->getQuestionIds(),
             $command->getIssuingUserId());

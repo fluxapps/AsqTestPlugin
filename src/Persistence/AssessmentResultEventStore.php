@@ -8,6 +8,8 @@ use srag\CQRS\Event\DomainEvent;
 use srag\CQRS\Event\DomainEvents;
 use srag\CQRS\Event\EventID;
 use srag\CQRS\Event\EventStore;
+use srag\asq\Application\Exception\AsqException;
+use ilDateTime;
 
 /**
  * Class AssessmentResultEventStore
@@ -47,15 +49,23 @@ class AssessmentResultEventStore extends EventStore {
     public function getAggregateHistoryFor(DomainObjectId $id): DomainEvents {
         global $DIC;
         
-        $sql = "SELECT * FROM " . AssessmentResultEventStore::STORAGE_NAME . " where aggregate_id = " . $DIC->database()->quote($id->getId(),'string');
+        $sql = "SELECT * FROM " . AssessmentResultEventStoreAr::STORAGE_NAME . " where aggregate_id = " . $DIC->database()->quote($id->getId(),'string');
         $res = $DIC->database()->query($sql);
+        
+        if ($res->rowCount() === 0) {
+            throw new AsqException('Aggregate does not exist');
+        }
         
         $event_stream = new DomainEvents();
         while ($row = $DIC->database()->fetchAssoc($res)) {
             /**@var AbstractDomainEvent $event */
-            $event_name = "srag\Plugins\AssessmentTest\DomainModel\\Event\\".utf8_encode(trim($row['event_name']));
-            $event = new $event_name(new DomainObjectId($row['aggregate_id']), $row['initiating_user_id'], $row['item_id']);
-            $event->restoreEventBody($row['event_body']);
+            $event_name = $row['event_class'];
+            $event = $event_name::restore(
+                new EventID($row['event_id']),
+                new DomainObjectId($row['aggregate_id']),
+                $row['initiating_user_id'],
+                new ilDateTime($row['occurred_on']),
+                $row['event_body']);
             $event_stream->addEvent($event);
         }
         

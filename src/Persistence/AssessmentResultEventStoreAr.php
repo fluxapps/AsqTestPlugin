@@ -2,7 +2,7 @@
 
 namespace srag\Plugins\AssessmentTest\Persistence;
 
-use srag\CQRS\CQRS\Event\AbstractStoredEvent;
+use srag\CQRS\Event\AbstractStoredEvent;
 
 /**
  * Class AssessmentResultEventStoreAr

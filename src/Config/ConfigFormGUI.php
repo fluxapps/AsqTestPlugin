@@ -2,12 +2,11 @@
 
 namespace srag\Plugins\AssessmentTest\Config;
 
-use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
 use ilAssessmentTestConfigGUI;
 use ilAssessmentTestPlugin;
 use ilTextInputGUI;
-use srag\ActiveRecordConfig\AssessmentTest\Config\Config;
 use srag\CustomInputGUIs\AssessmentTest\PropertyFormGUI\PropertyFormGUI;
+use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
 
 /**
  * Class ConfigFormGUI

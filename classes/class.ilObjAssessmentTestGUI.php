@@ -1,7 +1,9 @@
 <?php
 
 use srag\DIC\AssessmentTest\DICTrait;
+use srag\Plugins\AssessmentTest\DomainModel\AssessmentContext;
 use srag\Plugins\AssessmentTest\ObjectSettings\ObjectSettingsFormGUI;
+use srag\Plugins\AssessmentTest\PublicApi\TestService;
 use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
 use srag\asq\AsqGateway;
 use srag\asq\Application\Service\AuthoringContextContainer;
@@ -24,6 +26,7 @@ use srag\asq\UserInterface\Web\AsqGUIElementFactory;
  * @ilCtrl_Calls      ilObjAssessmentTestGUI: ilObjectCopyGUI
  * @ilCtrl_Calls      ilObjAssessmentTestGUI: ilCommonActionDispatcherGUI
  * @ilCtrl_Calls      ilObjAssessmentTestGUI: AsqQuestionAuthoringGUI
+ * @ilCtrl_Calls      ilObjAssessmentTestGUI: TestPlayerGUI
  */
 class ilObjAssessmentTestGUI extends ilObjectPluginGUI
 {
@@ -55,7 +58,11 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
      */
     public $object;
 
-
+    /**
+     * @var QuestionDto[]
+     */
+    private $questions;
+    
     /**
      * @inheritDoc
      */
@@ -68,13 +75,13 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
     /**
      * @inheritDoc
      */
-    public final function getType() : string
+    public final function getType(): string
     {
         return ilAssessmentTestPlugin::PLUGIN_ID;
     }
 
-
     /**
+     *
      * @param string $cmd
      */
     public function performCommand(string $cmd)/*: void*/
@@ -87,25 +94,22 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
             case strtolower(AsqQuestionAuthoringGUI::class):
                 $this->showAuthoring();
                 return;
+            case strtolower(TestPlayerGUI::class):
+                self::dic()->ctrl()->forwardCommand(new TestPlayerGUI());
+                return;
             default:
                 switch ($cmd) {
                     case self::CMD_SHOW_CONTENTS:
-                        // Read commands
-                        if (!ilObjAssessmentTestAccess::hasReadAccess()) {
-                            ilObjAssessmentTestAccess::redirectNonAccess(ilRepositoryGUI::class);
-                        }
-
-                        $this->{$cmd}();
-                        break;
-
                     case self::CMD_SHOW_QUESTIONS:
                     case self::CMD_SETTINGS:
                     case self::CMD_SETTINGS_STORE:
                     case self::CMD_INIT_ASQ:
+                        $this->questions = AsqGateway::get()->question()->getQuestionsOfContainer($this->object->id);
+                        
                         // Write commands
                         if (!ilObjAssessmentTestAccess::hasWriteAccess()) {
                             ilObjAssessmentTestAccess::redirectNonAccess($this);
-                        }
+                        }            $class_name = get_called_class();
 
                         $this->{$cmd}();
                         break;
@@ -196,10 +200,18 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
      */
     protected function showTest()/*: void*/
     {
-        self::dic()->tabs()->activateTab(self::TAB_CONTENTS);
-
-        // TODO: Implement manageContents
-        $this->show("");
+        $srv = new TestService();
+        
+        $context_uid = $srv->createTestRun(
+            AssessmentContext::create(self::dic()->user()->getId(), 'testrun'),
+            array_map(function($question) {
+                return $question->getId();
+            }, $this->questions));
+        
+        self::dic()->ctrl()->setParameterByClass(TestPlayerGUI::class, TestPlayerGUI::PARAM_CURRENT_RESULT, $context_uid);
+        self::dic()->ctrl()->redirectToURL(
+            self::dic()->ctrl()->getLinkTargetByClass(TestPlayerGUI::class, TestPlayerGUI::CMD_RUN_TEST)
+        );
     }
 
 
@@ -228,18 +240,17 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
         $question_table->addColumn(self::plugin()->translate("header_title"), self::COL_TITLE);
         $question_table->addColumn(self::plugin()->translate("header_type"), self::COL_TYPE);
         $question_table->addColumn(self::plugin()->translate("header_creator"), self::COL_AUTHOR);
-        
-        $questions = AsqGateway::get()->question()->getQuestionsOfContainer($this->object->id);
-        $question_table->setData($this->getQuestionsOfContainerAsAssocArray($questions));
+
+        $question_table->setData($this->getQuestionsOfContainerAsAssocArray());
         
         $this->show($question_table->getHTML());
     }
 
-    private function getQuestionsOfContainerAsAssocArray(array $questions) : array
+    private function getQuestionsOfContainerAsAssocArray() : array
     {
         $assoc_array = [];
-        /** @var $question_dto QuestionDto */
-        foreach($questions as $question_dto) {
+
+        foreach($this->questions as $question_dto) {
             $data = $question_dto->getData();
             
             $question_array[self::COL_TITLE] = is_null($data) ? self::VAL_NO_TITLE : $data->getTitle() ?? self::VAL_NO_TITLE;

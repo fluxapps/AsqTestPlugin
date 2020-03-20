@@ -10,6 +10,7 @@ use srag\asq\Application\Service\AuthoringContextContainer;
 use srag\asq\Domain\QuestionDto;
 use srag\asq\Infrastructure\Setup\sql\SetupDatabase;
 use srag\asq\UserInterface\Web\AsqGUIElementFactory;
+use \AsqQuestionAuthoringGUI;
 
 /**
  * Class ilObjAssessmentTestGUI
@@ -222,9 +223,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
     {
         self::dic()->tabs()->activateTab(self::TAB_QUESTIONS);
         
-        $link = AsqGateway::get()->link()->getCreationLink(array_map(function($item) {
-            return $item['class'];
-        }, self::dic()->ctrl()->getCallHistory()));
+        $link = AsqGateway::get()->link()->getCreationLink();
         $button = ilLinkButton::getInstance();
         $button->setUrl($link->getAction());
         $button->setCaption($link->getLabel(), false);

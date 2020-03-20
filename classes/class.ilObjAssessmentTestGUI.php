@@ -10,7 +10,6 @@ use srag\asq\Application\Service\AuthoringContextContainer;
 use srag\asq\Domain\QuestionDto;
 use srag\asq\Infrastructure\Setup\sql\SetupDatabase;
 use srag\asq\UserInterface\Web\AsqGUIElementFactory;
-use \AsqQuestionAuthoringGUI;
 
 /**
  * Class ilObjAssessmentTestGUI

@@ -267,6 +267,7 @@ class ComposerStaticInit2a52a98ea715a92eceb245f9b2b53954
         'srag\\asq\\Application\\Service\\ASQService' => __DIR__ . '/../..' . '/lib-asq/src/Application/Service/ASQService.php',
         'srag\\asq\\Application\\Service\\AnswerService' => __DIR__ . '/../..' . '/lib-asq/src/Application/Service/AnswerService.php',
         'srag\\asq\\Application\\Service\\AuthoringContextContainer' => __DIR__ . '/../..' . '/lib-asq/src/Application/Service/AuthoringContextContainer.php',
+        'srag\\asq\\Application\\Service\\IAuthoringCaller' => __DIR__ . '/../..' . '/lib-asq/src/Application/Service/IAuthoringCaller.php',
         'srag\\asq\\Application\\Service\\LinkService' => __DIR__ . '/../..' . '/lib-asq/src/Application/Service/LinkService.php',
         'srag\\asq\\Application\\Service\\QuestionService' => __DIR__ . '/../..' . '/lib-asq/src/Application/Service/QuestionService.php',
         'srag\\asq\\Application\\Service\\UIService' => __DIR__ . '/../..' . '/lib-asq/src/Application/Service/UIService.php',

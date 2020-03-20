@@ -10,6 +10,7 @@ use srag\asq\Application\Service\AuthoringContextContainer;
 use srag\asq\Domain\QuestionDto;
 use srag\asq\Infrastructure\Setup\sql\SetupDatabase;
 use srag\asq\UserInterface\Web\AsqGUIElementFactory;
+use srag\asq\Application\Service\IAuthoringCaller;
 
 /**
  * Class ilObjAssessmentTestGUI
@@ -28,7 +29,7 @@ use srag\asq\UserInterface\Web\AsqGUIElementFactory;
  * @ilCtrl_Calls      ilObjAssessmentTestGUI: AsqQuestionAuthoringGUI
  * @ilCtrl_Calls      ilObjAssessmentTestGUI: TestPlayerGUI
  */
-class ilObjAssessmentTestGUI extends ilObjectPluginGUI
+class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCaller
 {
 
     use DICTrait;
@@ -139,7 +140,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
             $this->object->getId(),
             $this->object->getType(),
             self::dic()->user()->getId(),
-            self::dic()->access()->checkAccess('write', '', $this->object->getRefId()));
+            $this);
             
         $asq = new AsqQuestionAuthoringGUI($authoring_context_container);
         
@@ -267,6 +268,14 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
     protected function initASQ() {
         $setup_database = new SetupDatabase();
         $setup_database->run(true);
+    }
+    
+    /**
+     * @param string $uuid
+     */
+    public function afterQuestionCreated(QuestionDto $question)
+    {
+        
     }
     
     /**

@@ -217,6 +217,7 @@ return array(
     'srag\\asq\\Application\\Service\\ASQService' => $baseDir . '/lib-asq/src/Application/Service/ASQService.php',
     'srag\\asq\\Application\\Service\\AnswerService' => $baseDir . '/lib-asq/src/Application/Service/AnswerService.php',
     'srag\\asq\\Application\\Service\\AuthoringContextContainer' => $baseDir . '/lib-asq/src/Application/Service/AuthoringContextContainer.php',
+    'srag\\asq\\Application\\Service\\IAuthoringCaller' => $baseDir . '/lib-asq/src/Application/Service/IAuthoringCaller.php',
     'srag\\asq\\Application\\Service\\LinkService' => $baseDir . '/lib-asq/src/Application/Service/LinkService.php',
     'srag\\asq\\Application\\Service\\QuestionService' => $baseDir . '/lib-asq/src/Application/Service/QuestionService.php',
     'srag\\asq\\Application\\Service\\UIService' => $baseDir . '/lib-asq/src/Application/Service/UIService.php',

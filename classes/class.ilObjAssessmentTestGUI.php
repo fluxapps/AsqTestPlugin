@@ -268,7 +268,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
     
     protected function initASQ() {
         $setup_database = new SetupDatabase();
-        $setup_database->run();
+        $setup_database->run(true);
     }
     
     /**

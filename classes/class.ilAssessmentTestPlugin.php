@@ -4,6 +4,7 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
 use srag\RemovePluginDataConfirm\AssessmentTest\RepositoryObjectPluginUninstallTrait;
+use srag\asq\Infrastructure\Setup\sql\SetupDatabase;
 
 /**
  * Class ilAssessmentTestPlugin
@@ -75,5 +76,13 @@ class ilAssessmentTestPlugin extends ilRepositoryObjectPlugin
     protected function deleteData()/*: void*/
     {
         self::assessmentTest()->dropTables();
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    protected function afterActivation() {
+        $setup = new SetupDatabase();
+        $setup->run();
     }
 }

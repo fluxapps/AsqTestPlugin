@@ -15,13 +15,14 @@ test:
   script:     
     # TODO: Run unit tests, etc.     
     - echo "Running unit tests..." 
-    
+
 review:   
   extends: .review_deployment   
   environment:     
     on_stop: stop_review   
   script:     
     - srag-review deploy 
+    - composer du
     
 stop_review:   
   extends: .review_deployment   

@@ -22,8 +22,8 @@ review:
     on_stop: stop_review   
   script:     
     - srag-review deploy 
-    - composer update
-    
+    - composer du
+   
 stop_review:   
   extends: .review_deployment   
   environment:     

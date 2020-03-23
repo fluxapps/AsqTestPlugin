@@ -212,7 +212,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
         
         self::dic()->ctrl()->setParameterByClass(TestPlayerGUI::class, TestPlayerGUI::PARAM_CURRENT_RESULT, $context_uid);
         self::dic()->ctrl()->redirectToURL(
-            self::dic()->ctrl()->getLinkTargetByClass(TestPlayerGUI::class, TestPlayerGUI::CMD_RUN_TEST)
+            self::dic()->ctrl()->getLinkTargetByClass(TestPlayerGUI::class, TestPlayerGUI::CMD_RUN_TEST, "", false, false)
         );
     }
 

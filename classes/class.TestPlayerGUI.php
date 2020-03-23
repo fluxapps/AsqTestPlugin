@@ -99,7 +99,7 @@ class TestPlayerGUI {
     
     private function redirectToQuestion(string $question_id) {
         self::dic()->ctrl()->setParameter($this, self::PARAM_CURRENT_QUESTION, $question_id);
-        self::dic()->ctrl()->redirectToURL(self::dic()->ctrl()->getLinkTarget($this, self::CMD_RUN_TEST));
+        self::dic()->ctrl()->redirectToURL(self::dic()->ctrl()->getLinkTarget($this, self::CMD_RUN_TEST, "", false, false));
     }
     
     private function showResults() {

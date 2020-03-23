@@ -18,6 +18,8 @@ use srag\Plugins\AssessmentTest\PublicApi\TestService;
  */
 class TestPlayerGUI {
     use DICTrait;
+    const LANG_TEST = 'test';
+    const PLUGIN_CLASS_NAME = ilAssessmentTestPlugin::class;
     
     const CMD_PREVIOUS_QUESTION = 'previousQuestion';
     const CMD_NEXT_QUESTION = 'nextQuestion';
@@ -147,26 +149,26 @@ class TestPlayerGUI {
         $previous_question = $this->test_service->getPreviousQuestionId($this->result_id, $this->question->getId());
         if (!is_null($previous_question)) {
             $prev_button = ilSubmitButton::getInstance();
-            $prev_button->setCaption(self::dic()->language()->txt('prev_question'), false);
+            $prev_button->setCaption(self::plugin()->translate('prev_question', self::LANG_TEST), false);
             $prev_button->setCommand(self::CMD_PREVIOUS_QUESTION);
             $buttons[] = $prev_button;
         }
         
         $save_button = ilSubmitButton::getInstance();
-        $save_button->setCaption(self::dic()->language()->txt('submit_answer'), false);
+        $save_button->setCaption(self::plugin()->translate('save_answer', self::LANG_TEST), false);
         $save_button->setCommand(self::CMD_RUN_TEST);
         $buttons[] = $save_button;
         
         $next_question = $this->test_service->getNextQuestionId($this->result_id, $this->question->getId());
         if (!is_null($next_question)) {
             $next_button = ilSubmitButton::getInstance();
-            $next_button->setCaption(self::dic()->language()->txt('next_question'), false);
+            $next_button->setCaption(self::plugin()->translate('next_question', self::LANG_TEST), false);
             $next_button->setCommand(self::CMD_NEXT_QUESTION);
             $buttons[] = $next_button;
         }
 
         $show_results = ilSubmitButton::getInstance();
-        $show_results->setCaption(self::dic()->language()->txt('show_results'), false);
+        $show_results->setCaption(self::plugin()->translate('show_results', self::LANG_TEST), false);
         $show_results->setCommand(self::CMD_SHOW_RESULTS);
         $buttons[] = $show_results;
         

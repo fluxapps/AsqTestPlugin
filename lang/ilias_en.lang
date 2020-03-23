@@ -31,3 +31,7 @@ settings_save#:#Save
 settings_saved#:#Settings saved
 settings_settings#:#Settings
 settings_title#:#Title
+test_prev_question#:#Previous
+test_save_answer#:#Save
+test_next_question#:#Next
+test_show_results#:#Show results

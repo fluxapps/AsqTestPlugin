@@ -11,6 +11,7 @@ use srag\asq\Domain\QuestionDto;
 use srag\asq\Infrastructure\Setup\sql\SetupDatabase;
 use srag\asq\UserInterface\Web\AsqGUIElementFactory;
 use srag\asq\Application\Service\IAuthoringCaller;
+use srag\asq\Infrastructure\Setup\lang\SetupLanguages;
 
 /**
  * Class ilObjAssessmentTestGUI
@@ -268,6 +269,8 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     protected function initASQ() {
         $setup_database = new SetupDatabase();
         $setup_database->run(true);
+        
+        SetupLanguages::new()->run();
     }
     
     /**

@@ -80,7 +80,7 @@ class TestPlayerGUI {
             $this->test_service->addAnswer($this->result_id, $this->question->getId(), $answer);
         }
         
-        self::dic()->ui()->mainTemplate()->setContent('<form method="post" action="' . self::dic()->ctrl()->getFormAction($this, self::CMD_RUN_TEST) . '">' . $component->renderHtml() . '<br />' . $this->createButtons() . '</form>');
+        self::dic()->ui()->mainTemplate()->setContent('<div style="background-color: white; border: 1px solid #D6D6D6; padding: 20px;"><form method="post" action="' . self::dic()->ctrl()->getFormAction($this, self::CMD_RUN_TEST) . '">' . $component->renderHtml() . '<br />' . $this->createButtons() . '</form></div>');
     }
     
     private function previousQuestion() {

@@ -97,6 +97,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
                 $this->showAuthoring();
                 return;
             case strtolower(TestPlayerGUI::class):
+                self::dic()->tabs()->activateTab(self::TAB_CONTENTS);
                 self::dic()->ctrl()->forwardCommand(new TestPlayerGUI());
                 return;
             default:
@@ -267,9 +268,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     }
     
     protected function initASQ() {
-        $setup_database = new SetupDatabase();
-        $setup_database->run(true);
-        
+        SetupDatabase::new()->run();
         SetupLanguages::new()->run();
     }
     

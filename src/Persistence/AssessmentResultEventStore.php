@@ -63,7 +63,7 @@ class AssessmentResultEventStore extends EventStore {
             $event = $event_name::restore(
                 new EventID($row['event_id']),
                 new DomainObjectId($row['aggregate_id']),
-                $row['initiating_user_id'],
+                intval($row['initiating_user_id']),
                 new ilDateTime($row['occurred_on']),
                 $row['event_body']);
             $event_stream->addEvent($event);

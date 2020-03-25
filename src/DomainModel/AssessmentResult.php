@@ -32,7 +32,7 @@ class AssessmentResult extends AbstractEventSourcedAggregateRoot{
     
     public static function create(DomainObjectId $id, AssessmentContext $context, array $question_ids, int $user_id) : AssessmentResult {
         $result = new AssessmentResult();
-        $occured_on = new ilDateTime();
+        $occured_on = new ilDateTime(time(), IL_CAL_UNIX);
         $result->ExecuteEvent(
             new AggregateCreatedEvent(
                 $id, 
@@ -79,7 +79,7 @@ class AssessmentResult extends AbstractEventSourcedAggregateRoot{
     public function setAnswer(string $question_id, Answer $answer, int $initiating_user_id) {
         if (array_key_exists($question_id, $this->questions)) {
             $this->ExecuteEvent(new AssessmentResultAnswerSetEvent(
-                $this->getAggregateId(), new ilDateTime(), $initiating_user_id, $question_id, $answer));
+                $this->getAggregateId(), new ilDateTime(time(), IL_CAL_UNIX), $initiating_user_id, $question_id, $answer));
         }
         else
         {

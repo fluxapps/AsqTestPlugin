@@ -1,0 +1,18 @@
+// Use this file as a starting point for your project's .eslintrc.
+// Copy this file, and add rule overrides as needed.
+{
+  "env": {
+    "jquery": true,
+    "browser": true
+  },
+  "extends": [
+    "airbnb-base"
+  ],
+  "rules": {
+    "indent": ["error", 4],
+  },
+  "globals": {
+    "tinymce": "readonly",
+    "asqAuthoring": "readonly"
+  }
+}

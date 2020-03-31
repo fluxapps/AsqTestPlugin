@@ -29,12 +29,14 @@
 		"psr-4" : {
 			"srag\\Plugins\\AssessmentTest\\" : "src/",
 			"srag\\CQRS\\" : "lib-cqrs/src/",
-			"srag\\asq\\" : "lib-asq/src/"
+			"srag\\asq\\" : "lib-asq/src/",
+            "srag\\asq\\Test\\" : "lib-asq-test/src/"
 		},
 		"classmap" : [
 			"classes/",
 			"lib-asq/classes/",
 			"lib-asq/vendor/",
+            "lib-asq-test/classes",
 			"lib-cqrs/vendor/"
 		]
 	},

@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'srag\\asq\\Test\\' => array($baseDir . '/lib-asq-test/src'),
     'srag\\asq\\' => array($baseDir . '/lib-asq/src'),
     'srag\\RemovePluginDataConfirm\\AssessmentTest\\' => array($vendorDir . '/srag/removeplugindataconfirm/src'),
     'srag\\Plugins\\AssessmentTest\\' => array($baseDir . '/src'),

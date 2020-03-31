@@ -7,11 +7,18 @@ use srag\asq\AsqGateway;
 use srag\asq\Application\Service\AuthoringContextContainer;
 use srag\asq\Application\Service\IAuthoringCaller;
 use srag\asq\Domain\QuestionDto;
-use srag\asq\Infrastructure\Setup\lang\SetupLanguages;
+use srag\asq\Infrastructure\Persistence\SimpleStoredAnswer;
+use srag\asq\Infrastructure\Persistence\EventStore\QuestionEventStoreAr;
+use srag\asq\Infrastructure\Persistence\Projection\QuestionAr;
+use srag\asq\Infrastructure\Persistence\Projection\QuestionListItemAr;
 use srag\asq\Infrastructure\Setup\sql\SetupDatabase;
-use srag\asq\Test\DomainModel\AssessmentContext;
-use srag\asq\Test\PublicApi\TestService;
+use srag\asq\Test\Application\Service\TestService;
+use srag\asq\Test\Domain\Model\AssessmentContext;
 use srag\asq\UserInterface\Web\AsqGUIElementFactory;
+use srag\asq\Infrastructure\Setup\lang\SetupAsqLanguages;
+use srag\asq\Test\Infrastructure\Setup\sql\SetupAsqTestDatabase;
+use srag\asq\Test\Infrastructure\Setup\lang\SetupAsqTestLanguages;
+use srag\asq\Test\Infrastructure\Persistence\AssessmentResultEventStoreAr;
 
 /**
  * Class ilObjAssessmentTestGUI
@@ -112,7 +119,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
                         // Write commands
                         if (!ilObjAssessmentTestAccess::hasWriteAccess()) {
                             ilObjAssessmentTestAccess::redirectNonAccess($this);
-                        }            $class_name = get_called_class();
+                        }
 
                         $this->{$cmd}();
                         break;
@@ -269,7 +276,16 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     
     protected function initASQ() {
         SetupDatabase::new()->run();
-        SetupLanguages::new()->run();
+        SetupAsqLanguages::new()->run();
+        SetupAsqTestDatabase::run();
+        SetupAsqTestLanguages::new()->run();
+        return;
+        
+        QuestionEventStoreAr::truncateDB();
+        QuestionListItemAr::truncateDB();
+        QuestionAr::truncateDB();
+        SimpleStoredAnswer::truncateDB();
+        AssessmentResultEventStoreAr::truncateDB();
     }
     
     /**

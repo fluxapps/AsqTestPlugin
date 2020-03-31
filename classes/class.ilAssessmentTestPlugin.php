@@ -4,9 +4,10 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
 use srag\RemovePluginDataConfirm\AssessmentTest\RepositoryObjectPluginUninstallTrait;
+use srag\asq\Infrastructure\Setup\lang\SetupAsqLanguages;
 use srag\asq\Infrastructure\Setup\sql\SetupDatabase;
-use srag\Plugins\AssessmentTest\Persistence\AssessmentResultEventStoreAr;
-use srag\asq\Infrastructure\Setup\lang\SetupLanguages;
+use srag\asq\Test\Infrastructure\Setup\lang\SetupAsqTestLanguages;
+use srag\asq\Test\Infrastructure\Setup\sql\SetupAsqTestDatabase;
 
 /**
  * Class ilAssessmentTestPlugin
@@ -85,7 +86,8 @@ class ilAssessmentTestPlugin extends ilRepositoryObjectPlugin
      */
     protected function afterActivation() {
         SetupDatabase::new()->run();
-        SetupLanguages::new()->run();
-        AssessmentResultEventStoreAr::updateDB();
+        SetupAsqTestDatabase::run();
+        SetupAsqLanguages::new()->run();
+        SetupAsqTestLanguages::new()->run();
     }
 }

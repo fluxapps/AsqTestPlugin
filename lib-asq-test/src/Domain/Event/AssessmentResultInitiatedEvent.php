@@ -1,17 +1,17 @@
 <?php
 
-namespace srag\Plugins\AssessmentTest\Events;
+namespace srag\asq\Test\Events;
 
-use srag\CQRS\Event\AbstractDomainEvent;
-use srag\Plugins\AssessmentTest\DomainModel\AssessmentContext;
-use srag\CQRS\Aggregate\DomainObjectId;
 use ilDateTime;
 use srag\CQRS\Aggregate\AbstractValueObject;
+use srag\CQRS\Aggregate\DomainObjectId;
+use srag\CQRS\Event\AbstractDomainEvent;
+use srag\asq\Test\DomainModel\AssessmentContext;
 
 /**
  * Class AssessmentResultInitiatedEvent
  *
- * @package srag\Plugins\AssessmentTest
+ * @package srag\asq\Test
  *
  * @author studer + raimann ag - Team Custom 1 <support-custom1@studer-raimann.ch>
  * @author studer + raimann ag - Team Core 2 <al@studer-raimann.ch>

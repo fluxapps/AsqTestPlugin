@@ -1,6 +1,6 @@
 <?php
 
-namespace srag\Plugins\AssessmentTest\Persistence;
+namespace srag\asq\Test\Persistence;
 
 use srag\CQRS\Aggregate\DomainObjectId;
 use srag\CQRS\Event\AbstractDomainEvent;
@@ -14,7 +14,7 @@ use ilDateTime;
 /**
  * Class AssessmentResultEventStore
  *
- * @package srag\Plugins\AssessmentTest
+ * @package srag\asq\Test
  *
  * @author studer + raimann ag - Team Custom 1 <support-custom1@studer-raimann.ch>
  * @author studer + raimann ag - Team Core 2 <al@studer-raimann.ch>

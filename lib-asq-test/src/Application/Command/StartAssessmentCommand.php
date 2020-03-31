@@ -1,14 +1,14 @@
 <?php
 
-namespace srag\Plugins\AssessmentTest\Command;
+namespace srag\asq\Test\Command;
 
 use srag\CQRS\Command\AbstractCommand;
-use srag\Plugins\AssessmentTest\DomainModel\AssessmentContext;
+use srag\asq\Test\DomainModel\AssessmentContext;
 
 /**
  * Class StartAssessmentCommand
  *
- * @package srag\Plugins\AssessmentTest
+ * @package srag\asq\Test
  *
  * @author studer + raimann ag - Team Custom 1 <support-custom1@studer-raimann.ch>
  * @author studer + raimann ag - Team Core 2 <al@studer-raimann.ch>

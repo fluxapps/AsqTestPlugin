@@ -1,11 +1,11 @@
 <?php
 
 use srag\DIC\AssessmentTest\DICTrait;
-use srag\Plugins\AssessmentTest\DomainModel\AssessmentResult;
-use srag\asq\Domain\QuestionDto;
-use srag\asq\Application\Exception\AsqException;
 use srag\asq\AsqGateway;
-use srag\Plugins\AssessmentTest\PublicApi\TestService;
+use srag\asq\Application\Exception\AsqException;
+use srag\asq\Domain\QuestionDto;
+use srag\asq\Test\DomainModel\AssessmentResult;
+use srag\asq\Test\PublicApi\TestService;
 
 /**
  * Class TestPlayerGUI

@@ -1,22 +1,22 @@
 <?php
 
-namespace srag\Plugins\AssessmentTest\PublicApi;
+namespace srag\asq\Test\PublicApi;
 
 use srag\CQRS\Aggregate\DomainObjectId;
 use srag\CQRS\Aggregate\Guid;
 use srag\CQRS\Command\CommandBusBuilder;
-use srag\Plugins\AssessmentTest\Command\AddAnswerCommand;
-use srag\Plugins\AssessmentTest\Command\StartAssessmentCommand;
-use srag\Plugins\AssessmentTest\DomainModel\AssessmentContext;
-use srag\Plugins\AssessmentTest\DomainModel\AssessmentResultRepository;
 use srag\asq\Application\Service\ASQService;
 use srag\asq\Domain\Model\Answer\Answer;
+use srag\asq\Test\Command\AddAnswerCommand;
+use srag\asq\Test\Command\StartAssessmentCommand;
+use srag\asq\Test\DomainModel\AssessmentContext;
+use srag\asq\Test\DomainModel\AssessmentResultRepository;
 
 
 /**
  * Class AssessmentContext
  *
- * @package srag\Plugins\AssessmentTest
+ * @package srag\asq\Test
  *
  * @author studer + raimann ag - Team Custom 1 <support-custom1@studer-raimann.ch>
  * @author studer + raimann ag - Team Core 2 <al@studer-raimann.ch>

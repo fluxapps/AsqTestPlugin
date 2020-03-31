@@ -1,17 +1,17 @@
 <?php
 
-namespace srag\Plugins\AssessmentTest\DomainModel;
+namespace srag\asq\Test\DomainModel;
 
 use srag\CQRS\Aggregate\AbstractEventSourcedAggregateRepository;
 use srag\CQRS\Aggregate\AggregateRoot;
 use srag\CQRS\Event\DomainEvents;
 use srag\CQRS\Event\EventStore;
-use srag\Plugins\AssessmentTest\Persistence\AssessmentResultEventStore;
+use srag\asq\Test\Persistence\AssessmentResultEventStore;
 
 /**
  * Class AssessmentResultRepository
  *
- * @package srag\Plugins\AssessmentTest
+ * @package srag\asq\Test
  *
  * @author studer + raimann ag - Team Custom 1 <support-custom1@studer-raimann.ch>
  * @author studer + raimann ag - Team Core 2 <al@studer-raimann.ch>

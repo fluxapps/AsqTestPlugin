@@ -4,3 +4,6 @@
 [submodule "lib-asq"]
 	path = lib-asq
 	url = ../../Libraries/AssessmentQuestion.git
+[submodule "lib-asq-test"]
+	path = lib-asq-test
+	url = ../../Libraries/AssessmentTest.git

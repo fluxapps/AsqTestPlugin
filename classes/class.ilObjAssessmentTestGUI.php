@@ -49,6 +49,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     const CMD_SETTINGS_STORE = "settingsStore";
     const CMD_SHOW_CONTENTS = "showTest";
     const CMD_INIT_ASQ = "initASQ";
+    const CMD_CLEAR_ASQ = "clearASQ";
     const LANG_MODULE_OBJECT = "object";
     const LANG_MODULE_SETTINGS = "settings";
     const TAB_CONTENTS = "contents";
@@ -114,6 +115,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
                     case self::CMD_SETTINGS:
                     case self::CMD_SETTINGS_STORE:
                     case self::CMD_INIT_ASQ:
+                    case self::CMD_CLEAR_ASQ:
                         $this->questions = AsqGateway::get()->question()->getQuestionsOfContainer($this->object->id);
                         
                         // Write commands
@@ -240,7 +242,12 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
 
         $button = ilLinkButton::getInstance();
         $button->setUrl(self::dic()->ctrl()->getLinkTargetByClass(self::class, self::CMD_INIT_ASQ));
-        $button->setCaption(self::plugin()->translate("init_asq"), false);
+        $button->setCaption("Init ASQ", false);
+        self::dic()->toolbar()->addButtonInstance($button);
+        
+        $button = ilLinkButton::getInstance();
+        $button->setUrl(self::dic()->ctrl()->getLinkTargetByClass(self::class, self::CMD_INIT_ASQ));
+        $button->setCaption("Clear ASQ", false);
         self::dic()->toolbar()->addButtonInstance($button);
         
         $question_table = new ilTable2GUI($this);
@@ -279,13 +286,18 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
         SetupAsqLanguages::new()->run();
         SetupAsqTestDatabase::run();
         SetupAsqTestLanguages::new()->run();
-        return;
         
+        $this->showQuestions();
+    }
+    
+    protected function clearASQ() {
         QuestionEventStoreAr::truncateDB();
         QuestionListItemAr::truncateDB();
         QuestionAr::truncateDB();
         SimpleStoredAnswer::truncateDB();
         AssessmentResultEventStoreAr::truncateDB();
+        
+        $this->showQuestions();
     }
     
     /**

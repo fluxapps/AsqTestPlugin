@@ -116,14 +116,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
                     case self::CMD_SETTINGS_STORE:
                     case self::CMD_INIT_ASQ:
                     case self::CMD_CLEAR_ASQ:
-                        try {
-                            $this->questions = AsqGateway::get()->question()->getQuestionsOfContainer($this->object->id);
-                        } catch(Exception $x) {
-                            //Usually if this happens ASQ structure has changed
-                            //TODO remove try/catch before release
-                            $this->questions = [];
-                        }
-                        
+                        $this->questions = AsqGateway::get()->question()->getQuestionsOfContainer($this->object->id);
                         
                         // Write commands
                         if (!ilObjAssessmentTestAccess::hasWriteAccess()) {

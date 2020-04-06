@@ -11,14 +11,16 @@ use srag\asq\Infrastructure\Persistence\SimpleStoredAnswer;
 use srag\asq\Infrastructure\Persistence\EventStore\QuestionEventStoreAr;
 use srag\asq\Infrastructure\Persistence\Projection\QuestionAr;
 use srag\asq\Infrastructure\Persistence\Projection\QuestionListItemAr;
-use srag\asq\Infrastructure\Setup\sql\SetupDatabase;
-use srag\asq\Test\Application\Service\TestService;
-use srag\asq\Test\Domain\Model\AssessmentContext;
-use srag\asq\UserInterface\Web\AsqGUIElementFactory;
 use srag\asq\Infrastructure\Setup\lang\SetupAsqLanguages;
-use srag\asq\Test\Infrastructure\Setup\sql\SetupAsqTestDatabase;
+use srag\asq\Infrastructure\Setup\sql\SetupDatabase;
+use srag\asq\Test\AsqTestGateway;
+use srag\asq\Test\Domain\Result\Model\AssessmentResultContext;
+use srag\asq\Test\Domain\Result\Persistence\AssessmentResultEventStoreAr;
+use srag\asq\Test\Domain\Section\Model\AssessmentSectionDto;
 use srag\asq\Test\Infrastructure\Setup\lang\SetupAsqTestLanguages;
-use srag\asq\Test\Infrastructure\Persistence\AssessmentResultEventStoreAr;
+use srag\asq\Test\Infrastructure\Setup\sql\SetupAsqTestDatabase;
+use srag\asq\UserInterface\Web\AsqGUIElementFactory;
+use srag\asq\Test\Application\TestRunner\TestRunnerService;
 
 /**
  * Class ilObjAssessmentTestGUI
@@ -69,16 +71,26 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     public $object;
 
     /**
-     * @var QuestionDto[]
+     * @var AssessmentSectionDto
      */
-    private $questions;
+    private $section;
     
     /**
      * @inheritDoc
      */
     protected function afterConstructor()/*: void*/
     {
-
+        if (!is_null($this->object)) {
+            $section_id = $this->object->getData();
+            
+            if (is_null($section_id)) {
+                $section_id = AsqTestGateway::get()->section()->createSection();
+                $this->object->setData($section_id);
+                $this->object->doUpdate();
+            }
+            
+            $this->section = AsqTestGateway::get()->section()->getSection($section_id);
+        }
     }
 
 
@@ -116,8 +128,6 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
                     case self::CMD_SETTINGS_STORE:
                     case self::CMD_INIT_ASQ:
                     case self::CMD_CLEAR_ASQ:
-                        $this->questions = AsqGateway::get()->question()->getQuestionsOfContainer($this->object->id);
-                        
                         // Write commands
                         if (!ilObjAssessmentTestAccess::hasWriteAccess()) {
                             ilObjAssessmentTestAccess::redirectNonAccess($this);
@@ -212,13 +222,13 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
      */
     protected function showTest()/*: void*/
     {
-        $srv = new TestService();
+        $srv = new TestRunnerService();
         
         $context_uid = $srv->createTestRun(
-            AssessmentContext::create(self::dic()->user()->getId(), 'testrun'),
+            AssessmentResultContext::create(self::dic()->user()->getId(), 'testrun'),
             array_map(function($question) {
                 return $question->getId();
-            }, $this->questions));
+            }, $this->section->getItems()));
         
         self::dic()->ctrl()->setParameterByClass(TestPlayerGUI::class, TestPlayerGUI::PARAM_CURRENT_RESULT, $context_uid);
         self::dic()->ctrl()->redirectToURL(
@@ -264,8 +274,15 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     private function getQuestionsOfContainerAsAssocArray() : array
     {
         $assoc_array = [];
-
-        foreach($this->questions as $question_dto) {
+        $items = $this->section->getItems();
+        
+        if (is_null($items)) {
+            return $assoc_array;
+        }
+        
+        foreach($items as $item) {
+            $question_dto = AsqGateway::get()->question()->getQuestionByQuestionId($item->getId());
+            
             $data = $question_dto->getData();
             
             $question_array[self::COL_TITLE] = is_null($data) ? self::VAL_NO_TITLE : $data->getTitle() ?? self::VAL_NO_TITLE;
@@ -305,7 +322,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
      */
     public function afterQuestionCreated(QuestionDto $question)
     {
-        
+        AsqTestGateway::get()->section()->addQuestion($this->section->getId(), $question->getId());
     }
     
     /**

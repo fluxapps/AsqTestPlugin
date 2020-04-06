@@ -66,6 +66,13 @@ class ObjectSettings extends ActiveRecord
      * @con_is_notnull   true
      */
     protected $is_online = false;
+    /**
+     * @var string
+     * 
+     * @con_has_field    true
+     * @con_fieldtype    clob
+     */
+    protected $data;
 
 
     /**
@@ -151,5 +158,19 @@ class ObjectSettings extends ActiveRecord
     public function setOnline(bool $is_online = true)/*: void*/
     {
         $this->is_online = $is_online;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getData(): ?string {
+        return $this->data;
+    }
+    
+    /**
+     * @param string $data
+     */
+    public function setData(string $data) {
+        $this->data = $data;
     }
 }

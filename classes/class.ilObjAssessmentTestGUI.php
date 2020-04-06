@@ -116,7 +116,14 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
                     case self::CMD_SETTINGS_STORE:
                     case self::CMD_INIT_ASQ:
                     case self::CMD_CLEAR_ASQ:
-                        $this->questions = AsqGateway::get()->question()->getQuestionsOfContainer($this->object->id);
+                        try {
+                            $this->questions = AsqGateway::get()->question()->getQuestionsOfContainer($this->object->id);
+                        } catch(Exception $x) {
+                            //Usually if this happens ASQ structure has changed
+                            //TODO remove try/catch before release
+                            $this->questions = [];
+                        }
+                        
                         
                         // Write commands
                         if (!ilObjAssessmentTestAccess::hasWriteAccess()) {
@@ -291,11 +298,11 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     }
     
     protected function clearASQ() {
-        QuestionEventStoreAr::truncateDB();
-        QuestionListItemAr::truncateDB();
-        QuestionAr::truncateDB();
-        SimpleStoredAnswer::truncateDB();
-        AssessmentResultEventStoreAr::truncateDB();
+        QuestionEventStoreAr::resetDB();
+        QuestionListItemAr::resetDB();
+        QuestionAr::resetDB();
+        SimpleStoredAnswer::resetDB();
+        AssessmentResultEventStoreAr::resetDB();
         
         $this->showQuestions();
     }

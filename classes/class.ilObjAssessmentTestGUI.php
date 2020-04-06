@@ -21,6 +21,7 @@ use srag\asq\Test\Infrastructure\Setup\lang\SetupAsqTestLanguages;
 use srag\asq\Test\Infrastructure\Setup\sql\SetupAsqTestDatabase;
 use srag\asq\UserInterface\Web\AsqGUIElementFactory;
 use srag\asq\Test\Application\TestRunner\TestRunnerService;
+use srag\asq\Test\Domain\Section\Persistence\AssessmentSectionEventStoreAr;
 
 /**
  * Class ilObjAssessmentTestGUI
@@ -313,6 +314,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
         QuestionAr::resetDB();
         SimpleStoredAnswer::resetDB();
         AssessmentResultEventStoreAr::resetDB();
+        AssessmentSectionEventStoreAr::resetDB();
         
         $this->showQuestions();
     }

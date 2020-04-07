@@ -36,7 +36,8 @@ trait RepositoryObjectPluginUninstallTrait
 
         $uninstall_removes_data = boolval($uninstall_removes_data);
 
-        if ($uninstall_removes_data) {
+        //TODO implement uninstall
+        if (true || $uninstall_removes_data) {
             $this->deleteData();
         }
 

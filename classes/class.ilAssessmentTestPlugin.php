@@ -4,8 +4,14 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
 use srag\RemovePluginDataConfirm\AssessmentTest\RepositoryObjectPluginUninstallTrait;
+use srag\asq\Infrastructure\Persistence\SimpleStoredAnswer;
+use srag\asq\Infrastructure\Persistence\EventStore\QuestionEventStoreAr;
+use srag\asq\Infrastructure\Persistence\Projection\QuestionAr;
+use srag\asq\Infrastructure\Persistence\Projection\QuestionListItemAr;
 use srag\asq\Infrastructure\Setup\lang\SetupAsqLanguages;
 use srag\asq\Infrastructure\Setup\sql\SetupDatabase;
+use srag\asq\Test\Domain\Result\Persistence\AssessmentResultEventStoreAr;
+use srag\asq\Test\Domain\Section\Persistence\AssessmentSectionEventStoreAr;
 use srag\asq\Test\Infrastructure\Setup\lang\SetupAsqTestLanguages;
 use srag\asq\Test\Infrastructure\Setup\sql\SetupAsqTestDatabase;
 
@@ -78,6 +84,14 @@ class ilAssessmentTestPlugin extends ilRepositoryObjectPlugin
      */
     protected function deleteData()/*: void*/
     {
+        global $DIC;
+        $DIC->database()->dropTable(QuestionEventStoreAr::STORAGE_NAME, false);
+        $DIC->database()->dropTable(QuestionListItemAr::STORAGE_NAME, false);
+        $DIC->database()->dropTable(QuestionAr::STORAGE_NAME, false);
+        $DIC->database()->dropTable(SimpleStoredAnswer::STORAGE_NAME, false);
+        $DIC->database()->dropTable(AssessmentResultEventStoreAr::STORAGE_NAME, false);
+        $DIC->database()->dropTable(AssessmentSectionEventStoreAr::STORAGE_NAME, false);
+        
         self::assessmentTest()->dropTables();
     }
     

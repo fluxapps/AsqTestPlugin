@@ -19,9 +19,9 @@ use srag\asq\Test\Domain\Result\Persistence\AssessmentResultEventStoreAr;
 use srag\asq\Test\Domain\Section\Model\AssessmentSectionDto;
 use srag\asq\Test\Infrastructure\Setup\lang\SetupAsqTestLanguages;
 use srag\asq\Test\Infrastructure\Setup\sql\SetupAsqTestDatabase;
-use srag\asq\UserInterface\Web\AsqGUIElementFactory;
 use srag\asq\Test\Application\TestRunner\TestRunnerService;
 use srag\asq\Test\Domain\Section\Persistence\AssessmentSectionEventStoreAr;
+use srag\asq\Infrastructure\Persistence\QuestionType;
 
 /**
  * Class ilObjAssessmentTestGUI
@@ -287,7 +287,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
             $data = $question_dto->getData();
             
             $question_array[self::COL_TITLE] = is_null($data) ? self::VAL_NO_TITLE : $data->getTitle() ?? self::VAL_NO_TITLE;
-            $question_array[self::COL_TYPE] = AsqGUIElementFactory::getQuestionTypes()[$question_dto->getType()];
+            $question_array[self::COL_TYPE] = $question_dto->getType()->getTitle();
             $question_array[self::COL_AUTHOR] = is_null($data) ? '' : $data->getAuthor();
             $question_array[self::COL_EDITLINK] = AsqGateway::get()->link()->getEditLink($question_dto->getId(), array_map(function($item) {
                 return $item['class'];
@@ -315,6 +315,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
         SimpleStoredAnswer::resetDB();
         AssessmentResultEventStoreAr::resetDB();
         AssessmentSectionEventStoreAr::resetDB();
+        QuestionType::resetDB();
         
         $this->showQuestions();
     }

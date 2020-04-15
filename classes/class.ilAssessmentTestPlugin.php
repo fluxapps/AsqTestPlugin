@@ -84,13 +84,8 @@ class ilAssessmentTestPlugin extends ilRepositoryObjectPlugin
      */
     protected function deleteData()/*: void*/
     {
-        global $DIC;
-        $DIC->database()->dropTable(QuestionEventStoreAr::STORAGE_NAME, false);
-        $DIC->database()->dropTable(QuestionListItemAr::STORAGE_NAME, false);
-        $DIC->database()->dropTable(QuestionAr::STORAGE_NAME, false);
-        $DIC->database()->dropTable(SimpleStoredAnswer::STORAGE_NAME, false);
-        $DIC->database()->dropTable(AssessmentResultEventStoreAr::STORAGE_NAME, false);
-        $DIC->database()->dropTable(AssessmentSectionEventStoreAr::STORAGE_NAME, false);
+        SetupDatabase::new()->uninstall();
+        SetupAsqTestDatabase::uninstall();
         
         self::assessmentTest()->dropTables();
     }

@@ -1,5 +1,6 @@
 <?php
 
+use srag\CQRS\Exception\CQRSException;
 use srag\DIC\AssessmentTest\DICTrait;
 use srag\Plugins\AssessmentTest\ObjectSettings\ObjectSettingsFormGUI;
 use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
@@ -81,6 +82,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
      */
     protected function afterConstructor()/*: void*/
     {
+        //TODO this will be replaced with usable code
         if (!is_null($this->object)) {
             $section_id = $this->object->getData();
             
@@ -90,7 +92,16 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
                 $this->object->doUpdate();
             }
             
-            $this->section = AsqTestGateway::get()->section()->getSection($section_id);
+            try {
+                $this->section = AsqTestGateway::get()->section()->getSection($section_id);
+            }
+            catch (CQRSException $e) {
+                $section_id = AsqTestGateway::get()->section()->createSection();
+                $this->object->setData($section_id);
+                $this->object->doUpdate();
+                
+                $this->section = AsqTestGateway::get()->section()->getSection($section_id);
+            }
         }
     }
 
@@ -257,7 +268,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
         self::dic()->toolbar()->addButtonInstance($button);
         
         $button = ilLinkButton::getInstance();
-        $button->setUrl(self::dic()->ctrl()->getLinkTargetByClass(self::class, self::CMD_INIT_ASQ));
+        $button->setUrl(self::dic()->ctrl()->getLinkTargetByClass(self::class, self::CMD_CLEAR_ASQ));
         $button->setCaption("Clear ASQ", false);
         self::dic()->toolbar()->addButtonInstance($button);
         

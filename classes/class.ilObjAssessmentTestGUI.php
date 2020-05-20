@@ -60,7 +60,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     const TAB_PERMISSIONS = "perm_settings";
     const TAB_SETTINGS = "settings";
     const TAB_QUESTIONS = "questions";
-    
+
     const COL_TITLE = 'QUESTION_TITLE';
     const COL_TYPE = 'QUESTION_TYPE';
     const COL_AUTHOR = 'QUESTION_AUTHOR';
@@ -76,7 +76,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
      * @var AssessmentSectionDto
      */
     private $section;
-    
+
     /**
      * @inheritDoc
      */
@@ -85,13 +85,13 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
         //TODO this will be replaced with usable code
         if (!is_null($this->object)) {
             $section_id = $this->object->getData();
-            
+
             if (is_null($section_id)) {
                 $section_id = AsqTestGateway::get()->section()->createSection();
                 $this->object->setData($section_id);
                 $this->object->doUpdate();
             }
-            
+
             try {
                 $this->section = AsqTestGateway::get()->section()->getSection($section_id);
             }
@@ -99,7 +99,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
                 $section_id = AsqTestGateway::get()->section()->createSection();
                 $this->object->setData($section_id);
                 $this->object->doUpdate();
-                
+
                 $this->section = AsqTestGateway::get()->section()->getSection($section_id);
             }
         }
@@ -126,6 +126,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
 
         switch (strtolower($next_class)) {
             case strtolower(AsqQuestionAuthoringGUI::class):
+                self::dic()->tabs()->activateTab(self::TAB_QUESTIONS);
                 $this->showAuthoring();
                 return;
             case strtolower(TestPlayerGUI::class):
@@ -156,17 +157,17 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
                 break;
         }
     }
-    
+
     /**
-     * 
+     *
      */
     private function showAuthoring()
     {
         $backLink = self::dic()->ui()->factory()->link()->standard(
-            self::dic()->language()->txt('back'), 
+            self::dic()->language()->txt('back'),
             self::dic()->ctrl()->getLinkTarget($this, self::CMD_SHOW_QUESTIONS));
-   
-        
+
+
         $authoring_context_container = new AuthoringContextContainer(
             $backLink,
             $this->object->getRefId(),
@@ -174,9 +175,9 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
             $this->object->getType(),
             self::dic()->user()->getId(),
             $this);
-            
+
         $asq = new AsqQuestionAuthoringGUI($authoring_context_container);
-        
+
         self::dic()->ctrl()->forwardCommand($asq);
     }
 
@@ -235,13 +236,13 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     protected function showTest()/*: void*/
     {
         $srv = new TestRunnerService();
-        
+
         $context_uid = $srv->createTestRun(
             AssessmentResultContext::create(self::dic()->user()->getId(), 'testrun'),
             array_map(function($question) {
                 return $question->getId();
             }, $this->section->getItems()));
-        
+
         self::dic()->ctrl()->setParameterByClass(TestPlayerGUI::class, TestPlayerGUI::PARAM_CURRENT_RESULT, $context_uid);
         self::dic()->ctrl()->redirectToURL(
             self::dic()->ctrl()->getLinkTargetByClass(TestPlayerGUI::class, TestPlayerGUI::CMD_RUN_TEST, "", false, false)
@@ -255,7 +256,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     protected function showQuestions()/*: void*/
     {
         self::dic()->tabs()->activateTab(self::TAB_QUESTIONS);
-        
+
         $link = AsqGateway::get()->link()->getCreationLink();
         $button = ilLinkButton::getInstance();
         $button->setUrl($link->getAction());
@@ -266,12 +267,12 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
         $button->setUrl(self::dic()->ctrl()->getLinkTargetByClass(self::class, self::CMD_INIT_ASQ));
         $button->setCaption("Init ASQ", false);
         self::dic()->toolbar()->addButtonInstance($button);
-        
+
         $button = ilLinkButton::getInstance();
         $button->setUrl(self::dic()->ctrl()->getLinkTargetByClass(self::class, self::CMD_CLEAR_ASQ));
         $button->setCaption("Clear ASQ", false);
         self::dic()->toolbar()->addButtonInstance($button);
-        
+
         $question_table = new ilTable2GUI($this);
         $question_table->setRowTemplate("tpl.questions_row.html", "Customizing/global/plugins/Services/Repository/RepositoryObject/AssessmentTest");
         $question_table->addColumn(self::plugin()->translate("header_title"), self::COL_TITLE);
@@ -279,7 +280,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
         $question_table->addColumn(self::plugin()->translate("header_creator"), self::COL_AUTHOR);
 
         $question_table->setData($this->getQuestionsOfContainerAsAssocArray());
-        
+
         $this->show($question_table->getHTML());
     }
 
@@ -287,39 +288,42 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     {
         $assoc_array = [];
         $items = $this->section->getItems();
-        
+
         if (is_null($items)) {
             return $assoc_array;
         }
-        
+
         foreach($items as $item) {
             $question_dto = AsqGateway::get()->question()->getQuestionByQuestionId($item->getId());
-            
+
             $data = $question_dto->getData();
-            
+
             $question_array[self::COL_TITLE] = is_null($data) ? self::VAL_NO_TITLE : $data->getTitle() ?? self::VAL_NO_TITLE;
             $question_array[self::COL_TYPE] = $question_dto->getType()->getTitle();
             $question_array[self::COL_AUTHOR] = is_null($data) ? '' : $data->getAuthor();
             $question_array[self::COL_EDITLINK] = AsqGateway::get()->link()->getEditLink($question_dto->getId(), array_map(function($item) {
                 return $item['class'];
             }, self::dic()->ctrl()->getCallHistory()))->getAction();
-            
+
             $assoc_array[] = $question_array;
         }
-        
+
         return $assoc_array;
     }
-    
+
     protected function initASQ() {
+        QuestionType::resetDB();
         SetupDatabase::new()->run();
         SetupAsqLanguages::new()->run();
         SetupAsqTestDatabase::run();
         SetupAsqTestLanguages::new()->run();
-        
+
         $this->showQuestions();
     }
-    
+
     protected function clearASQ() {
+        global $DIC;
+
         QuestionEventStoreAr::resetDB();
         QuestionListItemAr::resetDB();
         QuestionAr::resetDB();
@@ -327,10 +331,13 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
         AssessmentResultEventStoreAr::resetDB();
         AssessmentSectionEventStoreAr::resetDB();
         QuestionType::resetDB();
-        
-        $this->showQuestions();
+
+        //resetup asq for question types
+        SetupDatabase::new()->run();
+
+        $DIC->ctrl()->redirectToURL($DIC->ctrl()->getLinkTarget($this, self::CMD_SHOW_QUESTIONS, "", false, false));
     }
-    
+
     /**
      * @param string $uuid
      */
@@ -338,7 +345,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     {
         AsqTestGateway::get()->section()->addQuestion($this->section->getId(), $question->getId());
     }
-    
+
     /**
      * @return ObjectSettingsFormGUI
      */

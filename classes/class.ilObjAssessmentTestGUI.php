@@ -339,9 +339,10 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     }
 
     /**
-     * @param string $uuid
+     * {@inheritDoc}
+     * @see \srag\asq\Application\Service\IAuthoringCaller::afterQuestionCreated()
      */
-    public function afterQuestionCreated(QuestionDto $question)
+    public function afterQuestionCreated(QuestionDto $question) : void
     {
         AsqTestGateway::get()->section()->addQuestion($this->section->getId(), $question->getId());
     }

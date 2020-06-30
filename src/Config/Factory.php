@@ -19,7 +19,6 @@ use srag\ActiveRecordConfig\AssessmentTest\Config\AbstractFactory;
  */
 final class Factory extends AbstractFactory
 {
-
     use AssessmentTestTrait;
     const PLUGIN_CLASS_NAME = ilAssessmentTestPlugin::class;
     /**

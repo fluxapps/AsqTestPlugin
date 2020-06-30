@@ -23,7 +23,6 @@ use srag\CustomInputGUIs\AssessmentTest\PropertyFormGUI\PropertyFormGUI;
  */
 class ObjectSettingsFormGUI extends PropertyFormGUI
 {
-
     const PLUGIN_CLASS_NAME = ilAssessmentTestPlugin::class;
     const LANG_MODULE = ilObjAssessmentTestGUI::LANG_MODULE_SETTINGS;
     /**
@@ -78,15 +77,15 @@ class ObjectSettingsFormGUI extends PropertyFormGUI
     protected function initFields()/*: void*/
     {
         $this->fields = [
-            "title"       => [
-                self::PROPERTY_CLASS    => ilTextInputGUI::class,
+            "title" => [
+                self::PROPERTY_CLASS => ilTextInputGUI::class,
                 self::PROPERTY_REQUIRED => true
             ],
             "description" => [
-                self::PROPERTY_CLASS    => ilTextAreaInputGUI::class,
+                self::PROPERTY_CLASS => ilTextAreaInputGUI::class,
                 self::PROPERTY_REQUIRED => false
             ],
-            "online"      => [
+            "online" => [
                 self::PROPERTY_CLASS => ilCheckboxInputGUI::class
             ]
         ];
@@ -98,7 +97,6 @@ class ObjectSettingsFormGUI extends PropertyFormGUI
      */
     protected function initId()/*: void*/
     {
-
     }
 
 

@@ -15,7 +15,6 @@ use srag\DIC\AssessmentTest\DICTrait;
  */
 class ilAssessmentTestConfigGUI extends ilPluginConfigGUI
 {
-
     use DICTrait;
     use AssessmentTestTrait;
     const PLUGIN_CLASS_NAME = ilAssessmentTestPlugin::class;
@@ -30,7 +29,6 @@ class ilAssessmentTestConfigGUI extends ilPluginConfigGUI
      */
     public function __construct()
     {
-
     }
 
 

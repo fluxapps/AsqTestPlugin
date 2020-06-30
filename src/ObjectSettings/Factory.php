@@ -20,7 +20,6 @@ use srag\DIC\AssessmentTest\DICTrait;
  */
 final class Factory
 {
-
     use DICTrait;
     use AssessmentTestTrait;
     const PLUGIN_CLASS_NAME = ilAssessmentTestPlugin::class;
@@ -48,7 +47,6 @@ final class Factory
      */
     private function __construct()
     {
-
     }
 
 

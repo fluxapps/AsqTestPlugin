@@ -13,7 +13,6 @@ use srag\DIC\AssessmentTest\DICTrait;
  */
 class ilObjAssessmentTestListGUI extends ilObjectPluginListGUI
 {
-
     use DICTrait;
     use AssessmentTestTrait;
     const PLUGIN_CLASS_NAME = ilAssessmentTestPlugin::class;
@@ -72,8 +71,8 @@ class ilObjAssessmentTestListGUI extends ilObjectPluginListGUI
         $commands = [
             [
                 "permission" => "read",
-                "cmd"        => ilObjAssessmentTestGUI::getStartCmd(),
-                "default"    => true
+                "cmd" => ilObjAssessmentTestGUI::getStartCmd(),
+                "default" => true
             ]
         ];
 
@@ -90,9 +89,9 @@ class ilObjAssessmentTestListGUI extends ilObjectPluginListGUI
 
         if (ilObjAssessmentTestAccess::_isOffline($this->obj_id)) {
             $props[] = [
-                "alert"    => true,
+                "alert" => true,
                 "property" => self::plugin()->translate("status", ilObjAssessmentTestGUI::LANG_MODULE_OBJECT),
-                "value"    => self::plugin()->translate("offline", ilObjAssessmentTestGUI::LANG_MODULE_OBJECT)
+                "value" => self::plugin()->translate("offline", ilObjAssessmentTestGUI::LANG_MODULE_OBJECT)
             ];
         }
 

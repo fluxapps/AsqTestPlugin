@@ -20,7 +20,6 @@ use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
  */
 class ConfigFormGUI extends PropertyFormGUI
 {
-
     use AssessmentTestTrait;
     const PLUGIN_CLASS_NAME = ilAssessmentTestPlugin::class;
     const KEY_SOME = "some";
@@ -66,7 +65,7 @@ class ConfigFormGUI extends PropertyFormGUI
     {
         $this->fields = [
             self::KEY_SOME => [
-                self::PROPERTY_CLASS    => ilTextInputGUI::class,
+                self::PROPERTY_CLASS => ilTextInputGUI::class,
                 self::PROPERTY_REQUIRED => true
             ]
         ];
@@ -79,7 +78,6 @@ class ConfigFormGUI extends PropertyFormGUI
      */
     protected function initId()/*: void*/
     {
-
     }
 
 

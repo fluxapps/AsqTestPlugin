@@ -20,7 +20,6 @@ use srag\DIC\AssessmentTest\DICTrait;
  */
 class ObjectSettings extends ActiveRecord
 {
-
     use DICTrait;
     use AssessmentTestTrait;
     const TABLE_NAME = "rep_robj_xast_set";
@@ -68,7 +67,7 @@ class ObjectSettings extends ActiveRecord
     protected $is_online = false;
     /**
      * @var string
-     * 
+     *
      * @con_has_field    true
      * @con_fieldtype    clob
      */
@@ -163,14 +162,16 @@ class ObjectSettings extends ActiveRecord
     /**
      * @return string
      */
-    public function getData(): ?string {
+    public function getData() : ?string
+    {
         return $this->data;
     }
     
     /**
      * @param string $data
      */
-    public function setData(string $data) {
+    public function setData(string $data)
+    {
         $this->data = $data;
     }
 }

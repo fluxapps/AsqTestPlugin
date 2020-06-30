@@ -178,7 +178,13 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
             self::dic()->user()->getId(),
             $this);
 
-        $asq = new AsqQuestionAuthoringGUI($authoring_context_container);
+        $asq = new AsqQuestionAuthoringGUI(
+            $authoring_context_container,
+            self::dic()->language(),
+            self::dic()->ui(),
+            self::dic()->ctrl(),
+            self::dic()->tabs(),
+            self::dic()->access());
 
         self::dic()->ctrl()->forwardCommand($asq);
     }
@@ -301,7 +307,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
             $data = $question_dto->getData();
 
             $question_array[self::COL_TITLE] = is_null($data) ? self::VAL_NO_TITLE : $data->getTitle() ?? self::VAL_NO_TITLE;
-            $question_array[self::COL_TYPE] = $question_dto->getType()->getTitle();
+            $question_array[self::COL_TYPE] = self::dic()->language()->txt($question_dto->getType()->getTitleKey());
             $question_array[self::COL_AUTHOR] = is_null($data) ? '' : $data->getAuthor();
             $question_array[self::COL_EDITLINK] = AsqGateway::get()->link()->getEditLink($question_dto->getId(), array_map(function($item) {
                 return $item['class'];

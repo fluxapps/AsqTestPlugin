@@ -25,7 +25,6 @@ use srag\asq\Test\Infrastructure\Setup\sql\SetupAsqTestDatabase;
  */
 class ilAssessmentTestPlugin extends ilRepositoryObjectPlugin
 {
-
     use RepositoryObjectPluginUninstallTrait;
     use AssessmentTestTrait;
     const PLUGIN_ID = "xast";
@@ -93,7 +92,8 @@ class ilAssessmentTestPlugin extends ilRepositoryObjectPlugin
     /**
      * @inheritDoc
      */
-    protected function afterActivation() {
+    protected function afterActivation()
+    {
         SetupDatabase::new()->run();
         SetupAsqTestDatabase::run();
         SetupAsqLanguages::new()->run();

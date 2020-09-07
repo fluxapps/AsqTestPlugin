@@ -13,7 +13,6 @@ use srag\DIC\AssessmentTest\DICTrait;
  */
 class ilObjAssessmentTestAccess extends ilObjectPluginAccess
 {
-
     use DICTrait;
     use AssessmentTestTrait;
     const PLUGIN_CLASS_NAME = ilAssessmentTestPlugin::class;

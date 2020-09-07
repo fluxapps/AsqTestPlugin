@@ -20,7 +20,6 @@ use srag\ActiveRecordConfig\AssessmentTest\Config\Config;
  */
 final class Repository extends AbstractRepository
 {
-
     use AssessmentTestTrait;
     const PLUGIN_CLASS_NAME = ilAssessmentTestPlugin::class;
     /**

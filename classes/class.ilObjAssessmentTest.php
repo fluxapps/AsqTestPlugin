@@ -14,7 +14,6 @@ use srag\DIC\AssessmentTest\DICTrait;
  */
 class ilObjAssessmentTest extends ilObjectPlugin
 {
-
     use DICTrait;
     use AssessmentTestTrait;
     const PLUGIN_CLASS_NAME = ilAssessmentTestPlugin::class;
@@ -38,7 +37,7 @@ class ilObjAssessmentTest extends ilObjectPlugin
     /**
      * @inheritDoc
      */
-    public final function initType()/*: void*/
+    final public function initType()/*: void*/
     {
         $this->setType(ilAssessmentTestPlugin::PLUGIN_ID);
     }
@@ -121,7 +120,7 @@ class ilObjAssessmentTest extends ilObjectPlugin
     /**
      * @return string
      */
-    public function getData(): ?string
+    public function getData() : ?string
     {
         return $this->object_settings->getData();
     }
@@ -129,7 +128,8 @@ class ilObjAssessmentTest extends ilObjectPlugin
     /**
      * @param string $data
      */
-    public function setData(string $data) {
+    public function setData(string $data)
+    {
         $this->object_settings->setData($data);
     }
 }

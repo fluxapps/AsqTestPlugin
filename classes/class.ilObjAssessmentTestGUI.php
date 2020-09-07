@@ -184,7 +184,8 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
             self::dic()->ui(),
             self::dic()->ctrl(),
             self::dic()->tabs(),
-            self::dic()->access()
+            self::dic()->access(),
+            self::dic()->http()
         );
 
         self::dic()->ctrl()->forwardCommand($asq);

@@ -23,6 +23,7 @@ use srag\asq\Test\Infrastructure\Setup\sql\SetupAsqTestDatabase;
 use srag\asq\Test\Application\TestRunner\TestRunnerService;
 use srag\asq\Test\Domain\Section\Persistence\AssessmentSectionEventStoreAr;
 use srag\asq\Infrastructure\Persistence\QuestionType;
+use ILIAS\Data\UUID\Factory;
 
 /**
  * Class ilObjAssessmentTestGUI
@@ -77,27 +78,34 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     private $section;
 
     /**
+     * @var Factory
+     */
+    private $uuid_factory;
+
+    /**
      * @inheritDoc
      */
     protected function afterConstructor()/*: void*/
     {
+        $this->uuid_factory = new Factory();
+
         //TODO this will be replaced with usable code
         if (!is_null($this->object)) {
             $section_id = $this->object->getData();
 
             if (is_null($section_id)) {
                 $section_id = AsqTestGateway::get()->section()->createSection();
-                $this->object->setData($section_id);
+                $this->object->setData($section_id->toString());
                 $this->object->doUpdate();
             }
 
             try {
-                $this->section = AsqTestGateway::get()->section()->getSection($section_id);
+                $this->section = AsqTestGateway::get()->section()->getSection($this->uuid_factory->fromString($section_id));
             } catch (CQRSException $e) {
                 self::initASQ();
 
                 $section_id = AsqTestGateway::get()->section()->createSection();
-                $this->object->setData($section_id);
+                $this->object->setData($section_id->toString());
                 $this->object->doUpdate();
 
                 $this->section = AsqTestGateway::get()->section()->getSection($section_id);
@@ -309,7 +317,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
 
             $data = $question_dto->getData();
 
-            $question_array[self::COL_TITLE] = is_null($data) ? self::VAL_NO_TITLE : $data->getTitle() ?? self::VAL_NO_TITLE;
+            $question_array[self::COL_TITLE] = is_null($data) ? self::VAL_NO_TITLE : (empty($data->getTitle()) ? self::VAL_NO_TITLE : $data->getTitle());
             $question_array[self::COL_TYPE] = self::dic()->language()->txt($question_dto->getType()->getTitleKey());
             $question_array[self::COL_AUTHOR] = is_null($data) ? '' : $data->getAuthor();
             $question_array[self::COL_EDITLINK] = AsqGateway::get()->link()->getEditLink($question_dto->getId(), array_map(function ($item) {

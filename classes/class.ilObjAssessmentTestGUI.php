@@ -4,7 +4,6 @@ use srag\CQRS\Exception\CQRSException;
 use srag\DIC\AssessmentTest\DICTrait;
 use srag\Plugins\AssessmentTest\ObjectSettings\ObjectSettingsFormGUI;
 use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
-use srag\asq\AsqGateway;
 use srag\asq\Application\Service\AuthoringContextContainer;
 use srag\asq\Application\Service\IAuthoringCaller;
 use srag\asq\Domain\QuestionDto;
@@ -24,6 +23,7 @@ use srag\asq\Test\Application\TestRunner\TestRunnerService;
 use srag\asq\Test\Domain\Section\Persistence\AssessmentSectionEventStoreAr;
 use srag\asq\Infrastructure\Persistence\QuestionType;
 use ILIAS\Data\UUID\Factory;
+use srag\asq\Application\Service\ASQDIC;
 
 /**
  * Class ilObjAssessmentTestGUI
@@ -87,6 +87,10 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
      */
     protected function afterConstructor()/*: void*/
     {
+        global $DIC;
+
+        ASQDIC::initiateASQ($DIC);
+
         $this->uuid_factory = new Factory();
 
         //TODO this will be replaced with usable code
@@ -171,6 +175,8 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
      */
     private function showAuthoring()
     {
+        global $ASQDIC;
+
         $backLink = self::dic()->ui()->factory()->link()->standard(
             self::dic()->language()->txt('back'),
             self::dic()->ctrl()->getLinkTarget($this, self::CMD_SHOW_QUESTIONS)
@@ -193,7 +199,8 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
             self::dic()->ctrl(),
             self::dic()->tabs(),
             self::dic()->access(),
-            self::dic()->http()
+            self::dic()->http(),
+            $ASQDIC->asq()
         );
 
         self::dic()->ctrl()->forwardCommand($asq);
@@ -274,9 +281,11 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
      */
     protected function showQuestions()/*: void*/
     {
+        global $ASQDIC;
+
         self::dic()->tabs()->activateTab(self::TAB_QUESTIONS);
 
-        $link = AsqGateway::get()->link()->getCreationLink();
+        $link = $ASQDIC->asq()->link()->getCreationLink();
         $button = ilLinkButton::getInstance();
         $button->setUrl($link->getAction());
         $button->setCaption($link->getLabel(), false);
@@ -305,6 +314,8 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
 
     private function getQuestionsOfContainerAsAssocArray() : array
     {
+        global $ASQDIC;
+
         $assoc_array = [];
         $items = $this->section->getItems();
 
@@ -313,14 +324,14 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
         }
 
         foreach ($items as $item) {
-            $question_dto = AsqGateway::get()->question()->getQuestionByQuestionId($item->getId());
+            $question_dto = $ASQDIC->asq()->question()->getQuestionByQuestionId($item->getId());
 
             $data = $question_dto->getData();
 
             $question_array[self::COL_TITLE] = is_null($data) ? self::VAL_NO_TITLE : (empty($data->getTitle()) ? self::VAL_NO_TITLE : $data->getTitle());
             $question_array[self::COL_TYPE] = self::dic()->language()->txt($question_dto->getType()->getTitleKey());
             $question_array[self::COL_AUTHOR] = is_null($data) ? '' : $data->getAuthor();
-            $question_array[self::COL_EDITLINK] = AsqGateway::get()->link()->getEditLink($question_dto->getId(), array_map(function ($item) {
+            $question_array[self::COL_EDITLINK] = $ASQDIC->asq()->link()->getEditLink($question_dto->getId(), array_map(function ($item) {
                 return $item['class'];
             }, self::dic()->ctrl()->getCallHistory()))->getAction();
 

@@ -95,16 +95,19 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
 
         //TODO this will be replaced with usable code
         if (!is_null($this->object)) {
-            $section_id = $this->object->getData();
+            $raw_section_id = $this->object->getData();
 
-            if (is_null($section_id)) {
+            if (is_null($raw_section_id)) {
                 $section_id = AsqTestGateway::get()->section()->createSection();
                 $this->object->setData($section_id->toString());
                 $this->object->doUpdate();
             }
+            else {
+                $section_id = $this->uuid_factory->fromString($raw_section_id);
+            }
 
             try {
-                $this->section = AsqTestGateway::get()->section()->getSection($this->uuid_factory->fromString($section_id));
+                $this->section = AsqTestGateway::get()->section()->getSection($section_id);
             } catch (CQRSException $e) {
                 self::initASQ();
 

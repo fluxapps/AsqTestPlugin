@@ -14,6 +14,7 @@ use srag\asq\Test\Domain\Result\Persistence\AssessmentResultEventStoreAr;
 use srag\asq\Test\Domain\Section\Persistence\AssessmentSectionEventStoreAr;
 use srag\asq\Test\Infrastructure\Setup\lang\SetupAsqTestLanguages;
 use srag\asq\Test\Infrastructure\Setup\sql\SetupAsqTestDatabase;
+use srag\asq\Application\Service\ASQDIC;
 
 /**
  * Class ilAssessmentTestPlugin
@@ -83,17 +84,25 @@ class ilAssessmentTestPlugin extends ilRepositoryObjectPlugin
      */
     protected function deleteData()/*: void*/
     {
+        global $DIC;
+
+        ASQDIC::initiateASQ($DIC);
+
         SetupDatabase::new()->uninstall();
         SetupAsqTestDatabase::uninstall();
-        
+
         self::assessmentTest()->dropTables();
     }
-    
+
     /**
      * @inheritDoc
      */
     protected function afterActivation()
     {
+        global $DIC;
+
+        ASQDIC::initiateASQ($DIC);
+
         SetupDatabase::new()->run();
         SetupAsqTestDatabase::run();
         SetupAsqLanguages::new()->run();

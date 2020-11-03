@@ -1,12 +1,15 @@
 <?php
 
+use ILIAS\Data\UUID\Factory;
 use srag\CQRS\Exception\CQRSException;
 use srag\DIC\AssessmentTest\DICTrait;
 use srag\Plugins\AssessmentTest\ObjectSettings\ObjectSettingsFormGUI;
 use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
+use srag\asq\Application\Service\ASQDIC;
 use srag\asq\Application\Service\AuthoringContextContainer;
 use srag\asq\Application\Service\IAuthoringCaller;
 use srag\asq\Domain\QuestionDto;
+use srag\asq\Infrastructure\Persistence\QuestionType;
 use srag\asq\Infrastructure\Persistence\SimpleStoredAnswer;
 use srag\asq\Infrastructure\Persistence\EventStore\QuestionEventStoreAr;
 use srag\asq\Infrastructure\Persistence\Projection\QuestionAr;
@@ -14,16 +17,13 @@ use srag\asq\Infrastructure\Persistence\Projection\QuestionListItemAr;
 use srag\asq\Infrastructure\Setup\lang\SetupAsqLanguages;
 use srag\asq\Infrastructure\Setup\sql\SetupDatabase;
 use srag\asq\Test\AsqTestGateway;
+use srag\asq\Test\Application\TestRunner\TestRunnerService;
 use srag\asq\Test\Domain\Result\Model\AssessmentResultContext;
 use srag\asq\Test\Domain\Result\Persistence\AssessmentResultEventStoreAr;
 use srag\asq\Test\Domain\Section\Model\AssessmentSectionDto;
+use srag\asq\Test\Domain\Section\Persistence\AssessmentSectionEventStoreAr;
 use srag\asq\Test\Infrastructure\Setup\lang\SetupAsqTestLanguages;
 use srag\asq\Test\Infrastructure\Setup\sql\SetupAsqTestDatabase;
-use srag\asq\Test\Application\TestRunner\TestRunnerService;
-use srag\asq\Test\Domain\Section\Persistence\AssessmentSectionEventStoreAr;
-use srag\asq\Infrastructure\Persistence\QuestionType;
-use ILIAS\Data\UUID\Factory;
-use srag\asq\Application\Service\ASQDIC;
 
 /**
  * Class ilObjAssessmentTestGUI

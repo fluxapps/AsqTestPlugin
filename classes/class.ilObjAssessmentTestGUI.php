@@ -109,8 +109,6 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
             try {
                 $this->section = AsqTestGateway::get()->section()->getSection($section_id);
             } catch (CQRSException $e) {
-                self::initASQ();
-
                 $section_id = AsqTestGateway::get()->section()->createSection();
                 $this->object->setData($section_id->toString());
                 $this->object->doUpdate();
@@ -359,16 +357,14 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     {
         global $DIC;
 
-        QuestionEventStoreAr::resetDB();
-        QuestionListItemAr::resetDB();
-        QuestionAr::resetDB();
-        SimpleStoredAnswer::resetDB();
-        AssessmentResultEventStoreAr::resetDB();
-        AssessmentSectionEventStoreAr::resetDB();
-        QuestionType::resetDB();
-
         //resetup asq for question types
+        SetupDatabase::new()->uninstall();
         SetupDatabase::new()->run();
+        SetupAsqLanguages::new()->run();
+
+        foreach($this->section->getItems() as $item) {
+            AsqTestGateway::get()->section()->removeQuestion($this->section->getId(), $item->getId());
+        }
 
         $DIC->ctrl()->redirectToURL($DIC->ctrl()->getLinkTarget($this, self::CMD_SHOW_QUESTIONS, "", false, false));
     }

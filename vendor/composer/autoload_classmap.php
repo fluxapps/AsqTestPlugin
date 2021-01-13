@@ -647,6 +647,7 @@ return array(
     'srag\\asq\\UserInterface\\Web\\Form\\Factory\\AbstractObjectFactory' => $baseDir . '/lib-asq/src/UserInterface/Web/Form/Factory/AbstractObjectFactory.php',
     'srag\\asq\\UserInterface\\Web\\Form\\Factory\\IAnswerOptionFactory' => $baseDir . '/lib-asq/src/UserInterface/Web/Form/Factory/IAnswerOptionFactory.php',
     'srag\\asq\\UserInterface\\Web\\Form\\Factory\\IObjectFactory' => $baseDir . '/lib-asq/src/UserInterface/Web/Form/Factory/IObjectFactory.php',
+    'srag\\asq\\UserInterface\\Web\\Form\\Factory\\IQuestionFormFactory' => $baseDir . '/lib-asq/src/UserInterface/Web/Form/Factory/IQuestionFormFactory.php',
     'srag\\asq\\UserInterface\\Web\\Form\\Factory\\QuestionDataFormFactory' => $baseDir . '/lib-asq/src/UserInterface/Web/Form/Factory/QuestionDataFormFactory.php',
     'srag\\asq\\UserInterface\\Web\\Form\\Factory\\QuestionFormFactory' => $baseDir . '/lib-asq/src/UserInterface/Web/Form/Factory/QuestionFormFactory.php',
     'srag\\asq\\UserInterface\\Web\\Form\\InputHandlingTrait' => $baseDir . '/lib-asq/src/UserInterface/Web/Form/InputHandlingTrait.php',

@@ -702,6 +702,7 @@ class ComposerStaticInit2a52a98ea715a92eceb245f9b2b53954
         'srag\\asq\\UserInterface\\Web\\Form\\Factory\\AbstractObjectFactory' => __DIR__ . '/../..' . '/lib-asq/src/UserInterface/Web/Form/Factory/AbstractObjectFactory.php',
         'srag\\asq\\UserInterface\\Web\\Form\\Factory\\IAnswerOptionFactory' => __DIR__ . '/../..' . '/lib-asq/src/UserInterface/Web/Form/Factory/IAnswerOptionFactory.php',
         'srag\\asq\\UserInterface\\Web\\Form\\Factory\\IObjectFactory' => __DIR__ . '/../..' . '/lib-asq/src/UserInterface/Web/Form/Factory/IObjectFactory.php',
+        'srag\\asq\\UserInterface\\Web\\Form\\Factory\\IQuestionFormFactory' => __DIR__ . '/../..' . '/lib-asq/src/UserInterface/Web/Form/Factory/IQuestionFormFactory.php',
         'srag\\asq\\UserInterface\\Web\\Form\\Factory\\QuestionDataFormFactory' => __DIR__ . '/../..' . '/lib-asq/src/UserInterface/Web/Form/Factory/QuestionDataFormFactory.php',
         'srag\\asq\\UserInterface\\Web\\Form\\Factory\\QuestionFormFactory' => __DIR__ . '/../..' . '/lib-asq/src/UserInterface/Web/Form/Factory/QuestionFormFactory.php',
         'srag\\asq\\UserInterface\\Web\\Form\\InputHandlingTrait' => __DIR__ . '/../..' . '/lib-asq/src/UserInterface/Web/Form/InputHandlingTrait.php',

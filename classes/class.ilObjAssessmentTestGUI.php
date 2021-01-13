@@ -264,7 +264,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
         $srv = new TestRunnerService();
 
         $context_uid = $srv->createTestRun(
-            AssessmentResultContext::create(self::dic()->user()->getId(), 'testrun'),
+            new AssessmentResultContext(self::dic()->user()->getId(), 'testrun'),
             array_map(function ($question) {
                 return $question->getId();
             }, $this->section->getItems())

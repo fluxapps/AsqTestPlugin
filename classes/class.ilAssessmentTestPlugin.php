@@ -102,4 +102,13 @@ class ilAssessmentTestPlugin extends ilRepositoryObjectPlugin
         SetupAsqLanguages::new()->run();
         SetupAsqTestLanguages::new()->run();
     }
+
+    protected function afterDeactivation() {
+        global $DIC;
+
+        ASQDIC::initiateASQ($DIC);
+
+        SetupDatabase::new()->uninstall();
+        SetupAsqTestDatabase::uninstall();
+    }
 }

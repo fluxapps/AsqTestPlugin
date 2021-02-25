@@ -1,29 +1,23 @@
 <?php
 
 use ILIAS\Data\UUID\Factory;
-use srag\CQRS\Exception\CQRSException;
 use srag\DIC\AssessmentTest\DICTrait;
 use srag\Plugins\AssessmentTest\ObjectSettings\ObjectSettingsFormGUI;
 use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
-use srag\asq\Application\Service\ASQDIC;
 use srag\asq\Application\Service\AuthoringContextContainer;
 use srag\asq\Application\Service\IAuthoringCaller;
 use srag\asq\Domain\QuestionDto;
 use srag\asq\Infrastructure\Persistence\QuestionType;
-use srag\asq\Infrastructure\Persistence\SimpleStoredAnswer;
-use srag\asq\Infrastructure\Persistence\EventStore\QuestionEventStoreAr;
-use srag\asq\Infrastructure\Persistence\Projection\QuestionAr;
-use srag\asq\Infrastructure\Persistence\Projection\QuestionListItemAr;
 use srag\asq\Infrastructure\Setup\lang\SetupAsqLanguages;
 use srag\asq\Infrastructure\Setup\sql\SetupDatabase;
-use srag\asq\Test\AsqTestGateway;
+use srag\asq\Test\AsqTestServices;
 use srag\asq\Test\Application\TestRunner\TestRunnerService;
 use srag\asq\Test\Domain\Result\Model\AssessmentResultContext;
-use srag\asq\Test\Domain\Result\Persistence\AssessmentResultEventStoreAr;
 use srag\asq\Test\Domain\Section\Model\AssessmentSectionDto;
-use srag\asq\Test\Domain\Section\Persistence\AssessmentSectionEventStoreAr;
+use srag\asq\Test\Domain\Test\Model\AssessmentTestDto;
 use srag\asq\Test\Infrastructure\Setup\lang\SetupAsqTestLanguages;
 use srag\asq\Test\Infrastructure\Setup\sql\SetupAsqTestDatabase;
+use srag\asq\Application\Service\ASQDIC;
 
 /**
  * Class ilObjAssessmentTestGUI
@@ -73,6 +67,11 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     public $object;
 
     /**
+     * @var AssessmentTestDto
+     */
+    private $test;
+
+    /**
      * @var AssessmentSectionDto
      */
     private $section;
@@ -81,6 +80,11 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
      * @var Factory
      */
     private $uuid_factory;
+
+    /**
+     * @var AsqTestServices
+     */
+    private $asq_test;
 
     /**
      * @inheritDoc
@@ -92,32 +96,56 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
         ASQDIC::initiateASQ($DIC);
 
         $this->uuid_factory = new Factory();
+        $this->asq_test = AsqTestServices::get();
 
-        //TODO this will be replaced with usable code
+        $this->loadTest();
+    }
+
+    private function loadTest() : void
+    {
         if (!is_null($this->object)) {
-            $raw_section_id = $this->object->getData();
+            $raw_test_id = $this->object->getData();
 
-            if (is_null($raw_section_id)) {
-                $section_id = AsqTestGateway::get()->section()->createSection();
-                $this->object->setData($section_id->toString());
-                $this->object->doUpdate();
+            if (is_null($raw_test_id)) {
+                $this->initiateNewTest();
             }
             else {
-                $section_id = $this->uuid_factory->fromString($raw_section_id);
-            }
+                $this->test = $this->asq_test->test()->getTest(
+                    $this->uuid_factory->fromString($raw_test_id)
+                );
 
-            try {
-                $this->section = AsqTestGateway::get()->section()->getSection($section_id);
-            } catch (CQRSException $e) {
-                $section_id = AsqTestGateway::get()->section()->createSection();
-                $this->object->setData($section_id->toString());
-                $this->object->doUpdate();
+                if (count($this->test->getSections()) === 0) {
+                    $section_id = $this->asq_test->section()->createSection();
 
-                $this->section = AsqTestGateway::get()->section()->getSection($section_id);
+                    $this->section = $this->asq_test->section()->getSection($section_id);
+
+                    $this->test->addSection($section_id);
+                    $this->asq_test->test()->saveTest($this->test);
+                }
+                else {
+                    $this->section = $this->asq_test->section()->getSection(
+                        $this->test->getSections()[0]
+                    );
+                }
             }
         }
     }
 
+    private function initiateNewTest() : void
+    {
+        $test_id = $this->asq_test->test()->createTest();
+        $this->object->setData($test_id->toString());
+        $this->object->doUpdate();
+
+        $this->test = $this->asq_test->test()->getTest($test_id);
+
+        $section_id = $this->asq_test->section()->createSection();
+
+        $this->section = $this->asq_test->section()->getSection($section_id);
+
+        $this->test->addSection($section_id);
+        $this->asq_test->test()->saveTest($this->test);
+    }
 
     /**
      * @inheritDoc
@@ -363,7 +391,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
         SetupAsqLanguages::new()->run();
 
         foreach($this->section->getItems() as $item) {
-            AsqTestGateway::get()->section()->removeQuestion($this->section->getId(), $item->getId());
+            $this->asq_test->removeQuestion($this->section->getId(), $item->getId());
         }
 
         $DIC->ctrl()->redirectToURL($DIC->ctrl()->getLinkTarget($this, self::CMD_SHOW_QUESTIONS, "", false, false));
@@ -375,7 +403,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
      */
     public function afterQuestionCreated(QuestionDto $question) : void
     {
-        AsqTestGateway::get()->section()->addQuestion($this->section->getId(), $question->getId());
+        $this->asq_test->section()->addQuestion($this->section->getId(), $question->getId());
     }
 
     /**

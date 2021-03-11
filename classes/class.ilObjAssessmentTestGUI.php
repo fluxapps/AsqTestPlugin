@@ -2,8 +2,8 @@
 
 use ILIAS\Data\UUID\Factory;
 use srag\DIC\AssessmentTest\DICTrait;
-use srag\Plugins\AssessmentTest\ObjectSettings\ObjectSettingsFormGUI;
 use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
+use srag\asq\Application\Service\ASQDIC;
 use srag\asq\Application\Service\AuthoringContextContainer;
 use srag\asq\Application\Service\IAuthoringCaller;
 use srag\asq\Domain\QuestionDto;
@@ -17,7 +17,8 @@ use srag\asq\Test\Domain\Section\Model\AssessmentSectionDto;
 use srag\asq\Test\Domain\Test\Model\AssessmentTestDto;
 use srag\asq\Test\Infrastructure\Setup\lang\SetupAsqTestLanguages;
 use srag\asq\Test\Infrastructure\Setup\sql\SetupAsqTestDatabase;
-use srag\asq\Application\Service\ASQDIC;
+use srag\asq\Test\UI\ConfigurationGUI;
+use srag\asq\Test\Domain\Test\Model\TestData;
 
 /**
  * Class ilObjAssessmentTestGUI
@@ -44,7 +45,6 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     const CMD_SHOW_QUESTIONS = "showQuestions";
     const CMD_PERMISSIONS = "perm";
     const CMD_SETTINGS = "settings";
-    const CMD_SETTINGS_STORE = "settingsStore";
     const CMD_SHOW_CONTENTS = "showTest";
     const CMD_INIT_ASQ = "initASQ";
     const CMD_CLEAR_ASQ = "clearASQ";
@@ -114,19 +114,9 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
                     $this->uuid_factory->fromString($raw_test_id)
                 );
 
-                if (count($this->test->getSections()) === 0) {
-                    $section_id = $this->asq_test->section()->createSection();
-
-                    $this->section = $this->asq_test->section()->getSection($section_id);
-
-                    $this->test->addSection($section_id);
-                    $this->asq_test->test()->saveTest($this->test);
-                }
-                else {
-                    $this->section = $this->asq_test->section()->getSection(
-                        $this->test->getSections()[0]
-                    );
-                }
+                $this->section = $this->asq_test->section()->getSection(
+                    $this->test->getSections()[0]
+                );
             }
         }
     }
@@ -138,12 +128,14 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
         $this->object->doUpdate();
 
         $this->test = $this->asq_test->test()->getTest($test_id);
+        $this->test->setTestData(new TestData($this->object->getTitle(), $this->object->getDescription()));
 
         $section_id = $this->asq_test->section()->createSection();
 
         $this->section = $this->asq_test->section()->getSection($section_id);
 
         $this->test->addSection($section_id);
+
         $this->asq_test->test()->saveTest($this->test);
     }
 
@@ -179,7 +171,6 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
                     case self::CMD_SHOW_CONTENTS:
                     case self::CMD_SHOW_QUESTIONS:
                     case self::CMD_SETTINGS:
-                    case self::CMD_SETTINGS_STORE:
                     case self::CMD_INIT_ASQ:
                     case self::CMD_CLEAR_ASQ:
                         // Write commands
@@ -407,26 +398,34 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     }
 
     /**
-     * @return ObjectSettingsFormGUI
-     */
-    protected function getSettingsForm() : ObjectSettingsFormGUI
-    {
-        $form = new ObjectSettingsFormGUI($this, $this->object);
-
-        return $form;
-    }
-
-
-    /**
      *
      */
     protected function settings()/*: void*/
     {
+
         self::dic()->tabs()->activateTab(self::TAB_SETTINGS);
 
-        $form = $this->getSettingsForm();
+        $form = new ConfigurationGUI($this->test);
 
-        self::output()->output($form);
+        $subtabs = $form->getSubTabs();
+        foreach ($subtabs as $key => $value) {
+            self::dic()->ctrl()->setParameter($this, ConfigurationGUI::CURRENT_CONFIG, $key);
+            self::dic()->tabs()->addSubTab(
+                 $key,
+                 $value,
+                 self::dic()->ctrl()->getLinkTarget($this, self::CMD_SETTINGS));
+        }
+
+        $current_subtab = $_GET[ConfigurationGUI::CURRENT_CONFIG] ?? array_key_first($subtabs);
+        if ($current_subtab !== null) {
+            self::dic()->tabs()->activateSubTab($current_subtab);
+        }
+
+        if ($this->http->request()->getMethod() === 'POST') {
+            $form->save();
+        }
+
+        self::output()->output($form->render($current_subtab));
     }
 
 

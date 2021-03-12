@@ -421,7 +421,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
             self::dic()->tabs()->activateSubTab($current_subtab);
         }
 
-        if ($this->http->request()->getMethod() === 'POST') {
+        if ($_SERVER['method'] === 'POST') {
             $form->save();
         }
 

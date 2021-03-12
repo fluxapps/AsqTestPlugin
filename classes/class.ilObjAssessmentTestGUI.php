@@ -421,34 +421,13 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
             self::dic()->tabs()->activateSubTab($current_subtab);
         }
 
-        if ($_SERVER['method'] === 'POST') {
-            $form->save();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->test = $form->getEditedTest();
+            $this->asq_test->test()->saveTest($this->test);
         }
 
         self::output()->output($form->render($current_subtab));
     }
-
-
-    /**
-     *
-     */
-    protected function settingsStore()/*: void*/
-    {
-        self::dic()->tabs()->activateTab(self::TAB_SETTINGS);
-
-        $form = $this->getSettingsForm();
-
-        if (!$form->storeForm()) {
-            self::output()->output($form);
-
-            return;
-        }
-
-        ilUtil::sendSuccess(self::plugin()->translate("saved", self::LANG_MODULE_SETTINGS), true);
-
-        self::dic()->ctrl()->redirect($this, self::CMD_SETTINGS);
-    }
-
 
     /**
      *

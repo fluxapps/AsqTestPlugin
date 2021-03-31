@@ -351,9 +351,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
             $question_array[self::COL_TITLE] = is_null($data) ? self::VAL_NO_TITLE : (empty($data->getTitle()) ? self::VAL_NO_TITLE : $data->getTitle());
             $question_array[self::COL_TYPE] = self::dic()->language()->txt($question_dto->getType()->getTitleKey());
             $question_array[self::COL_AUTHOR] = is_null($data) ? '' : $data->getAuthor();
-            $question_array[self::COL_EDITLINK] = $ASQDIC->asq()->link()->getEditLink($question_dto->getId(), array_map(function ($item) {
-                return $item['class'];
-            }, self::dic()->ctrl()->getCallHistory()))->getAction();
+            $question_array[self::COL_EDITLINK] = $ASQDIC->asq()->link()->getEditLink($question_dto->getId())->getAction();
 
             $assoc_array[] = $question_array;
         }

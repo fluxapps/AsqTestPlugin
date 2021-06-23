@@ -1,9 +1,9 @@
 [submodule "lib-cqrs"]
 	path = lib-cqrs
-	url = ../../Libraries/CQRS.git
+	url = ../CQRS.git
 [submodule "lib-asq"]
 	path = lib-asq
-	url = ../../Libraries/AssessmentQuestion.git
+	url = ../ASQ.git
 [submodule "lib-asq-test"]
 	path = lib-asq-test
-	url = ../../Libraries/AssessmentTest.git
+	url = ../AsqTest.git

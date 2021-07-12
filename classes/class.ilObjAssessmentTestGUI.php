@@ -1,19 +1,19 @@
 <?php
 
 use ILIAS\Data\UUID\Factory;
+use srag\asq\Test\Domain\Test\Modules\IQuestionSourceModule;
+use srag\asq\Test\Leipzig\LeipzigTest;
+use srag\asq\Test\Lib\Event\IEventUser;
+use srag\asq\Test\Modules\Questions\QuestionPage;
 use srag\DIC\AssessmentTest\DICTrait;
 use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
 use srag\asq\Application\Service\ASQDIC;
-use srag\asq\Application\Service\AuthoringContextContainer;
-use srag\asq\Application\Service\IAuthoringCaller;
-use srag\asq\Domain\QuestionDto;
 use srag\asq\Infrastructure\Persistence\QuestionType;
 use srag\asq\Infrastructure\Setup\lang\SetupAsqLanguages;
 use srag\asq\Infrastructure\Setup\sql\SetupDatabase;
 use srag\asq\Test\AsqTestServices;
 use srag\asq\Test\Application\TestRunner\TestRunnerService;
 use srag\asq\Test\Domain\Result\Model\AssessmentResultContext;
-use srag\asq\Test\Domain\Section\Model\AssessmentSectionDto;
 use srag\asq\Test\Domain\Test\Model\AssessmentTestDto;
 use srag\asq\Test\Infrastructure\Setup\lang\SetupAsqTestLanguages;
 use srag\asq\Test\Infrastructure\Setup\sql\SetupAsqTestDatabase;
@@ -36,8 +36,9 @@ use srag\asq\Test\Domain\Test\Model\TestData;
  * @ilCtrl_Calls      ilObjAssessmentTestGUI: ilCommonActionDispatcherGUI
  * @ilCtrl_Calls      ilObjAssessmentTestGUI: AsqQuestionAuthoringGUI
  * @ilCtrl_Calls      ilObjAssessmentTestGUI: TestPlayerGUI
+ * @ilCtrl_Calls      ilObjAssessmentTestGUI: QuestionPoolSelectionGUI
  */
-class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCaller
+class ilObjAssessmentTestGUI extends ilObjectPluginGUI
 {
     use DICTrait;
     use AssessmentTestTrait;
@@ -48,6 +49,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     const CMD_SHOW_CONTENTS = "showTest";
     const CMD_INIT_ASQ = "initASQ";
     const CMD_CLEAR_ASQ = "clearASQ";
+
     const LANG_MODULE_OBJECT = "object";
     const LANG_MODULE_SETTINGS = "settings";
     const TAB_CONTENTS = "contents";
@@ -61,30 +63,13 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     const COL_EDITLINK = "QUESTION_EDITLINK";
     const VAL_NO_TITLE = '-----';
 
-    /**
-     * @var ilObjAssessmentTest
-     */
-    public $object;
+    private AssessmentTestDto $test_data;
 
-    /**
-     * @var AssessmentTestDto
-     */
-    private $test;
+    private LeipzigTest $test;
 
-    /**
-     * @var AssessmentSectionDto
-     */
-    private $section;
+    private Factory $uuid_factory;
 
-    /**
-     * @var Factory
-     */
-    private $uuid_factory;
-
-    /**
-     * @var AsqTestServices
-     */
-    private $asq_test;
+    private AsqTestServices $asq_test;
 
     /**
      * @inheritDoc
@@ -103,40 +88,31 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
 
     private function loadTest() : void
     {
-        if (!is_null($this->object)) {
+        if (!is_null($this->object))
+        {
             $raw_test_id = $this->object->getData();
 
             if (is_null($raw_test_id)) {
-                $this->initiateNewTest();
+                $this->createNewTest();
             }
             else {
-                $this->test = $this->asq_test->test()->getTest(
+                $this->test_data = $this->asq_test->test()->getTest(
                     $this->uuid_factory->fromString($raw_test_id)
-                );
-
-                $this->section = $this->asq_test->section()->getSection(
-                    $this->test->getSections()[0]
                 );
             }
         }
+
+        $this->test = new LeipzigTest($this->test_data);
     }
 
-    private function initiateNewTest() : void
+    private function createNewTest() : void
     {
         $test_id = $this->asq_test->test()->createTest();
         $this->object->setData($test_id->toString());
         $this->object->doUpdate();
 
-        $this->test = $this->asq_test->test()->getTest($test_id);
-        $this->test->setTestData(new TestData($this->object->getTitle(), $this->object->getDescription()));
-
-        $section_id = $this->asq_test->section()->createSection();
-
-        $this->section = $this->asq_test->section()->getSection($section_id);
-
-        $this->test->addSection($section_id);
-
-        $this->asq_test->test()->saveTest($this->test);
+        $this->test_data = $this->asq_test->test()->getTest($test_id);
+        $this->test_data->setTestData(new TestData($this->object->getTitle(), $this->object->getDescription()));
     }
 
     /**
@@ -147,10 +123,6 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
         return ilAssessmentTestPlugin::PLUGIN_ID;
     }
 
-    /**
-     *
-     * @param string $cmd
-     */
     public function performCommand(string $cmd)/*: void*/
     {
         self::dic()->help()->setScreenIdComponent(ilAssessmentTestPlugin::PLUGIN_ID);
@@ -158,10 +130,6 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
         $next_class = self::dic()->ctrl()->getNextClass($this);
 
         switch (strtolower($next_class)) {
-            case strtolower(AsqQuestionAuthoringGUI::class):
-                self::dic()->tabs()->activateTab(self::TAB_QUESTIONS);
-                $this->showAuthoring();
-                return;
             case strtolower(TestPlayerGUI::class):
                 self::dic()->tabs()->activateTab(self::TAB_CONTENTS);
                 self::dic()->ctrl()->forwardCommand(new TestPlayerGUI());
@@ -182,8 +150,8 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
                         break;
 
                     default:
-                        // Unknown command
-                        ilObjAssessmentTestAccess::redirectNonAccess(ilRepositoryGUI::class);
+                        $this->test->executeCommand($cmd);
+                        $this->show();
                         break;
                 }
                 break;
@@ -191,65 +159,31 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     }
 
     /**
-     *
-     */
-    private function showAuthoring()
-    {
-        global $ASQDIC;
-
-        $backLink = self::dic()->ui()->factory()->link()->standard(
-            self::dic()->language()->txt('back'),
-            self::dic()->ctrl()->getLinkTarget($this, self::CMD_SHOW_QUESTIONS)
-        );
-
-
-        $authoring_context_container = new AuthoringContextContainer(
-            $backLink,
-            $this->object->getRefId(),
-            $this->object->getId(),
-            $this->object->getType(),
-            self::dic()->user()->getId(),
-            $this
-        );
-
-        $asq = new AsqQuestionAuthoringGUI(
-            $authoring_context_container,
-            self::dic()->language(),
-            self::dic()->ui(),
-            self::dic()->ctrl(),
-            self::dic()->tabs(),
-            self::dic()->access(),
-            self::dic()->http(),
-            $ASQDIC->asq()
-        );
-
-        self::dic()->ctrl()->forwardCommand($asq);
-    }
-
-
-
-    /**
      * @param string $html
      */
-    protected function show(string $html)/*: void*/
+    protected function show()/*: void*/
     {
-        if (!self::dic()->ctrl()->isAsynch()) {
-            self::dic()->ui()->mainTemplate()->setTitle($this->object->getTitle());
+        foreach ($this->test->ui()->getTabs() as $tab) {
+            self::dic()->tabs()->addTab(
+                $tab->getId(),
+                $tab->getText(),
+                self::dic()->ctrl()->getLinkTarget($this, $tab->getLink())
+            );
 
-            self::dic()->ui()->mainTemplate()->setDescription($this->object->getDescription());
-
-            if (!$this->object->isOnline()) {
-                self::dic()->ui()->mainTemplate()->setAlertProperties([
-                    [
-                        "alert" => true,
-                        "property" => self::plugin()->translate("status", self::LANG_MODULE_OBJECT),
-                        "value" => self::plugin()->translate("offline", self::LANG_MODULE_OBJECT)
-                    ]
-                ]);
+            if($tab->isActive()) {
+                self::dic()->tabs()->activateTab($tab->getId());
             }
         }
 
-        self::output()->output($html);
+        foreach ($this->test->ui()->getToolbar() as $tool) {
+            self::dic()->toolbar()->addComponent($tool);
+        }
+
+        self::dic()->ui()->mainTemplate()->setTitle($this->test->ui()->getTitle());
+
+        self::dic()->ui()->mainTemplate()->setDescription($this->test->ui()->getDescription());
+
+        self::output()->output($this->test->ui()->getContent());
     }
 
 
@@ -305,12 +239,6 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
 
         self::dic()->tabs()->activateTab(self::TAB_QUESTIONS);
 
-        $link = $ASQDIC->asq()->link()->getCreationLink();
-        $button = ilLinkButton::getInstance();
-        $button->setUrl($link->getAction());
-        $button->setCaption($link->getLabel(), false);
-        self::dic()->toolbar()->addButtonInstance($button);
-
         $button = ilLinkButton::getInstance();
         $button->setUrl(self::dic()->ctrl()->getLinkTargetByClass(self::class, self::CMD_INIT_ASQ));
         $button->setCaption("Init ASQ", false);
@@ -334,9 +262,11 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
 
     private function getQuestionsOfContainerAsAssocArray() : array
     {
+        return [];
         global $ASQDIC;
 
         $assoc_array = [];
+
         $items = $this->section->getItems();
 
         if (is_null($items)) {
@@ -387,15 +317,6 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     }
 
     /**
-     * {@inheritDoc}
-     * @see \srag\asq\Application\Service\IAuthoringCaller::afterQuestionCreated()
-     */
-    public function afterQuestionCreated(QuestionDto $question) : void
-    {
-        $this->asq_test->section()->addQuestion($this->section->getId(), $question->getId());
-    }
-
-    /**
      *
      */
     protected function settings()/*: void*/
@@ -403,7 +324,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
 
         self::dic()->tabs()->activateTab(self::TAB_SETTINGS);
 
-        $form = new ConfigurationGUI($this->test);
+        $form = new ConfigurationGUI($this->test_data);
 
         $subtabs = $form->getSubTabs();
         foreach ($subtabs as $key => $value) {
@@ -420,8 +341,8 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->test = $form->getEditedTest();
-            $this->asq_test->test()->saveTest($this->test);
+            $this->test_data = $form->getEditedTest();
+            $this->asq_test->test()->saveTest($this->test_data);
         }
 
         self::output()->output($form->render($current_subtab));
@@ -432,6 +353,8 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
      */
     protected function setTabs()/*: void*/
     {
+        return;
+
         self::dic()->tabs()->addTab(self::TAB_CONTENTS, self::plugin()->translate("show_contents", self::LANG_MODULE_OBJECT), self::dic()->ctrl()
             ->getLinkTarget($this, self::CMD_SHOW_CONTENTS));
 
@@ -461,7 +384,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI implements IAuthoringCall
     public static function getStartCmd() : string
     {
         if (ilObjAssessmentTestAccess::hasWriteAccess()) {
-            return self::CMD_SHOW_QUESTIONS;
+            return QuestionPage::SHOW_QUESTIONS;
         } else {
             return self::CMD_SHOW_CONTENTS;
         }

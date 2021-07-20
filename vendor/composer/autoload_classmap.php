@@ -659,6 +659,7 @@ return array(
     'srag\\asq\\Test\\Modules\\Questions\\Selection\\QuestionSelectionConfiguration' => $baseDir . '/lib-asq-test/src/Modules/Questions/Selection/QuestionSelectionConfiguration.php',
     'srag\\asq\\Test\\Modules\\Questions\\Selection\\QuestionSelectionConfigurationFactory' => $baseDir . '/lib-asq-test/src/Modules/Questions/Selection/QuestionSelectionConfigurationFactory.php',
     'srag\\asq\\Test\\Modules\\Questions\\Sources\\Fixed\\FixedSource' => $baseDir . '/lib-asq-test/src/Modules/Questions/Sources/Fixed/FixedSource.php',
+    'srag\\asq\\Test\\Modules\\Questions\\Sources\\Pool\\QuestionPoolSelection' => $baseDir . '/lib-asq-test/src/Modules/Questions/Sources/Pool/QuestionPoolSelection.php',
     'srag\\asq\\Test\\Modules\\Questions\\Sources\\Pool\\QuestionPoolSource' => $baseDir . '/lib-asq-test/src/Modules/Questions/Sources/Pool/QuestionPoolSource.php',
     'srag\\asq\\Test\\Modules\\Result\\Grades\\GradeDefinition' => $baseDir . '/lib-asq-test/src/Modules/Result/Grades/GradeDefinition.php',
     'srag\\asq\\Test\\Modules\\Result\\Grades\\Grades' => $baseDir . '/lib-asq-test/src/Modules/Result/Grades/Grades.php',

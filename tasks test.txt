@@ -1,0 +1,8 @@
+GENERAL
+	- remove ilDateTime
+	- type declaration for properties
+	- headers -> fluxlabs
+	- value object interface
+	
+POOL
+	- projections for search

@@ -714,6 +714,7 @@ class ComposerStaticInit2a52a98ea715a92eceb245f9b2b53954
         'srag\\asq\\Test\\Modules\\Questions\\Selection\\QuestionSelectionConfiguration' => __DIR__ . '/../..' . '/lib-asq-test/src/Modules/Questions/Selection/QuestionSelectionConfiguration.php',
         'srag\\asq\\Test\\Modules\\Questions\\Selection\\QuestionSelectionConfigurationFactory' => __DIR__ . '/../..' . '/lib-asq-test/src/Modules/Questions/Selection/QuestionSelectionConfigurationFactory.php',
         'srag\\asq\\Test\\Modules\\Questions\\Sources\\Fixed\\FixedSource' => __DIR__ . '/../..' . '/lib-asq-test/src/Modules/Questions/Sources/Fixed/FixedSource.php',
+        'srag\\asq\\Test\\Modules\\Questions\\Sources\\Pool\\QuestionPoolSelection' => __DIR__ . '/../..' . '/lib-asq-test/src/Modules/Questions/Sources/Pool/QuestionPoolSelection.php',
         'srag\\asq\\Test\\Modules\\Questions\\Sources\\Pool\\QuestionPoolSource' => __DIR__ . '/../..' . '/lib-asq-test/src/Modules/Questions/Sources/Pool/QuestionPoolSource.php',
         'srag\\asq\\Test\\Modules\\Result\\Grades\\GradeDefinition' => __DIR__ . '/../..' . '/lib-asq-test/src/Modules/Result/Grades/GradeDefinition.php',
         'srag\\asq\\Test\\Modules\\Result\\Grades\\Grades' => __DIR__ . '/../..' . '/lib-asq-test/src/Modules/Result/Grades/Grades.php',

@@ -3,6 +3,12 @@ GENERAL
 	- type declaration for properties
 	- headers -> fluxlabs
 	- value object interface
-	
-POOL
-	- projections for search
+	- drop uuid class
+
+UI
+    - table control
+    - move markup to asq
+
+ARCHITECTURE
+    - inject ASQ into $DIC
+    - create trait for translations, ctrl and other generic references

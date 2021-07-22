@@ -88,18 +88,19 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
 
     private function loadTest() : void
     {
-        if (!is_null($this->object))
-        {
-            $raw_test_id = $this->object->getData();
+        if ($this->object === null) {
+            return;
+        }
 
-            if (is_null($raw_test_id)) {
-                $this->createNewTest();
-            }
-            else {
-                $this->test_data = $this->asq_test->test()->getTest(
-                    $this->uuid_factory->fromString($raw_test_id)
-                );
-            }
+        $raw_test_id = $this->object->getData();
+
+        if (is_null($raw_test_id)) {
+            $this->createNewTest();
+        }
+        else {
+            $this->test_data = $this->asq_test->test()->getTest(
+                $this->uuid_factory->fromString($raw_test_id)
+            );
         }
 
         $this->test = new LeipzigTest($this->test_data);

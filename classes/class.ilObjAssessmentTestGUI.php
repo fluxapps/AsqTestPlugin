@@ -4,7 +4,6 @@ use ILIAS\Data\UUID\Factory;
 use srag\asq\Test\Domain\Test\Modules\IQuestionSourceModule;
 use srag\asq\Test\Leipzig\LeipzigTest;
 use srag\asq\Test\Lib\Event\IEventUser;
-use srag\asq\Test\Modules\Questions\QuestionPage;
 use srag\DIC\AssessmentTest\DICTrait;
 use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
 use srag\asq\Application\Service\ASQDIC;
@@ -385,7 +384,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
     public static function getStartCmd() : string
     {
         if (ilObjAssessmentTestAccess::hasWriteAccess()) {
-            return QuestionPage::SHOW_QUESTIONS;
+            return LeipzigTest::getInitialCommand();
         } else {
             return self::CMD_SHOW_CONTENTS;
         }

@@ -97,22 +97,19 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
             $this->createNewTest();
         }
         else {
-            $this->test_data = $this->asq_test->test()->getTest(
-                $this->uuid_factory->fromString($raw_test_id)
-            );
+            $this->test = LeipzigTest::load($this->uuid_factory->fromString($raw_test_id));
         }
 
-        $this->test = new LeipzigTest($this->test_data);
+
     }
 
     private function createNewTest() : void
     {
-        $test_id = $this->asq_test->test()->createTest();
+        $test_id = $this->uuid_factory->uuid4();
         $this->object->setData($test_id->toString());
         $this->object->doUpdate();
 
-        $this->test_data = $this->asq_test->test()->getTest($test_id);
-        $this->test_data->setTestData(new TestData($this->object->getTitle(), $this->object->getDescription()));
+        $this->test = LeipzigTest::create($test_id, $this->object->getTitle(), $this->object->getDescription());
     }
 
     /**

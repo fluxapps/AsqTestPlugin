@@ -10,6 +10,7 @@ class ComposerStaticInit2a52a98ea715a92eceb245f9b2b53954
         's' => 
         array (
             'srag\\asq\\Test\\' => 14,
+            'srag\\asq\\QuestionPool\\' => 22,
             'srag\\asq\\' => 9,
             'srag\\RemovePluginDataConfirm\\AssessmentTest\\' => 44,
             'srag\\Plugins\\AssessmentTest\\' => 28,
@@ -25,6 +26,10 @@ class ComposerStaticInit2a52a98ea715a92eceb245f9b2b53954
         'srag\\asq\\Test\\' => 
         array (
             0 => __DIR__ . '/../..' . '/lib-asq-test/src',
+        ),
+        'srag\\asq\\QuestionPool\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/lib-asq-pool/src',
         ),
         'srag\\asq\\' => 
         array (
@@ -441,6 +446,25 @@ class ComposerStaticInit2a52a98ea715a92eceb245f9b2b53954
         'srag\\asq\\Infrastructure\\Setup\\lang\\SetupAsqLanguages' => __DIR__ . '/../..' . '/lib-asq/src/Infrastructure/Setup/lang/SetupAsqLanguages.php',
         'srag\\asq\\Infrastructure\\Setup\\lang\\SetupLanguages' => __DIR__ . '/../..' . '/lib-asq/src/Infrastructure/Setup/lang/SetupLanguages.php',
         'srag\\asq\\Infrastructure\\Setup\\sql\\SetupDatabase' => __DIR__ . '/../..' . '/lib-asq/src/Infrastructure/Setup/sql/SetupDatabase.php',
+        'srag\\asq\\QuestionPool\\Application\\Command\\AddQuestionCommand' => __DIR__ . '/../..' . '/lib-asq-pool/src/Application/Command/AddQuestionCommand.php',
+        'srag\\asq\\QuestionPool\\Application\\Command\\AddQuestionCommandHandler' => __DIR__ . '/../..' . '/lib-asq-pool/src/Application/Command/AddQuestionCommandHandler.php',
+        'srag\\asq\\QuestionPool\\Application\\Command\\CreatePoolCommand' => __DIR__ . '/../..' . '/lib-asq-pool/src/Application/Command/CreatePoolCommand.php',
+        'srag\\asq\\QuestionPool\\Application\\Command\\CreatePoolCommandHandler' => __DIR__ . '/../..' . '/lib-asq-pool/src/Application/Command/CreatePoolCommandHandler.php',
+        'srag\\asq\\QuestionPool\\Application\\Command\\RemoveQuestionCommand' => __DIR__ . '/../..' . '/lib-asq-pool/src/Application/Command/RemoveQuestionCommand.php',
+        'srag\\asq\\QuestionPool\\Application\\Command\\RemoveQuestionCommandHandler' => __DIR__ . '/../..' . '/lib-asq-pool/src/Application/Command/RemoveQuestionCommandHandler.php',
+        'srag\\asq\\QuestionPool\\Application\\Command\\StorePoolCommand' => __DIR__ . '/../..' . '/lib-asq-pool/src/Application/Command/StorePoolCommand.php',
+        'srag\\asq\\QuestionPool\\Application\\Command\\StorePoolCommandHandler' => __DIR__ . '/../..' . '/lib-asq-pool/src/Application/Command/StorePoolCommandHandler.php',
+        'srag\\asq\\QuestionPool\\Application\\QuestionPoolService' => __DIR__ . '/../..' . '/lib-asq-pool/src/Application/QuestionPoolService.php',
+        'srag\\asq\\QuestionPool\\Domain\\Event\\PoolConfigurationSetEvent' => __DIR__ . '/../..' . '/lib-asq-pool/src/Domain/Event/PoolConfigurationSetEvent.php',
+        'srag\\asq\\QuestionPool\\Domain\\Event\\PoolDataSetEvent' => __DIR__ . '/../..' . '/lib-asq-pool/src/Domain/Event/PoolDataSetEvent.php',
+        'srag\\asq\\QuestionPool\\Domain\\Event\\QuestionAddedEvent' => __DIR__ . '/../..' . '/lib-asq-pool/src/Domain/Event/QuestionAddedEvent.php',
+        'srag\\asq\\QuestionPool\\Domain\\Event\\QuestionRemovedEvent' => __DIR__ . '/../..' . '/lib-asq-pool/src/Domain/Event/QuestionRemovedEvent.php',
+        'srag\\asq\\QuestionPool\\Domain\\Model\\QuestionPool' => __DIR__ . '/../..' . '/lib-asq-pool/src/Domain/Model/QuestionPool.php',
+        'srag\\asq\\QuestionPool\\Domain\\Model\\QuestionPoolData' => __DIR__ . '/../..' . '/lib-asq-pool/src/Domain/Model/QuestionPoolData.php',
+        'srag\\asq\\QuestionPool\\Domain\\Model\\QuestionPoolListItem' => __DIR__ . '/../..' . '/lib-asq-pool/src/Domain/Model/QuestionPoolListItem.php',
+        'srag\\asq\\QuestionPool\\Domain\\Model\\QuestionPoolRepository' => __DIR__ . '/../..' . '/lib-asq-pool/src/Domain/Model/QuestionPoolRepository.php',
+        'srag\\asq\\QuestionPool\\Domain\\Persistence\\QuestionPoolEventStore' => __DIR__ . '/../..' . '/lib-asq-pool/src/Domain/Persistence/QuestionPoolEventStore.php',
+        'srag\\asq\\QuestionPool\\Domain\\Persistence\\QuestionPoolEventStoreAr' => __DIR__ . '/../..' . '/lib-asq-pool/src/Domain/Persistence/QuestionPoolEventStoreAr.php',
         'srag\\asq\\Questions\\Choice\\Editor\\ImageMap\\Data\\ImageMapEditorConfiguration' => __DIR__ . '/../..' . '/lib-asq/src/Questions/Choice/Editor/ImageMap/Data/ImageMapEditorConfiguration.php',
         'srag\\asq\\Questions\\Choice\\Editor\\ImageMap\\Data\\ImageMapEditorDefinition' => __DIR__ . '/../..' . '/lib-asq/src/Questions/Choice/Editor/ImageMap/Data/ImageMapEditorDefinition.php',
         'srag\\asq\\Questions\\Choice\\Editor\\ImageMap\\ImageMapEditor' => __DIR__ . '/../..' . '/lib-asq/src/Questions/Choice/Editor/ImageMap/ImageMapEditor.php',

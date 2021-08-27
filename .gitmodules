@@ -7,3 +7,6 @@
 [submodule "lib-asq-test"]
 	path = lib-asq-test
 	url = ../AsqTest.git
+[submodule "lib-asq-pool"]
+	path = lib-asq-pool
+	url = ../AsqPool.git

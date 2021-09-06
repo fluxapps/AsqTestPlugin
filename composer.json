@@ -32,7 +32,7 @@
 			"srag\\asq\\" : "lib-asq/src/",
 			"srag\\asq\\Test\\" : "lib-asq-test/src/",
 			"srag\\asq\\QuestionPool\\" : "lib-asq-pool/src/",
-			"Fluxlabs\\Assessment\\Tools" : "lib-asq-tools/src/"
+			"Fluxlabs\\Assessment\\Tools\\" : "lib-asq-tools/src/"
 		},
 		"classmap" : [
 			"classes/",

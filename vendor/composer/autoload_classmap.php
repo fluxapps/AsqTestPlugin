@@ -34,6 +34,7 @@ return array(
     'Composer\\Autoload\\ComposerStaticInit5318e757d5da5bfcd5d31c364243d4ec' => $baseDir . '/lib-cqrs/vendor/composer/autoload_static.php',
     'Composer\\Autoload\\ComposerStaticInitbe295a3e8d49c0364ae2bbc005130ee3' => $baseDir . '/lib-asq/vendor/composer/autoload_static.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'Fluxlabs\\Assessment\\Tools\\DIC\\CtrlTrait' => $baseDir . '/lib-asq-tools/src/DIC/CtrlTrait.php',
     'Ramsey\\Collection\\AbstractArray' => $baseDir . '/lib-asq/vendor/ramsey/collection/src/AbstractArray.php',
     'Ramsey\\Collection\\AbstractCollection' => $baseDir . '/lib-asq/vendor/ramsey/collection/src/AbstractCollection.php',
     'Ramsey\\Collection\\AbstractSet' => $baseDir . '/lib-asq/vendor/ramsey/collection/src/AbstractSet.php',

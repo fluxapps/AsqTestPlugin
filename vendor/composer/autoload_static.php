@@ -20,6 +20,10 @@ class ComposerStaticInit2a52a98ea715a92eceb245f9b2b53954
             'srag\\CQRS\\' => 10,
             'srag\\ActiveRecordConfig\\AssessmentTest\\' => 39,
         ),
+        'F' => 
+        array (
+            'Fluxlabs\\Assessment\\Tools\\' => 26,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -63,6 +67,10 @@ class ComposerStaticInit2a52a98ea715a92eceb245f9b2b53954
         array (
             0 => __DIR__ . '/..' . '/srag/activerecordconfig/src',
         ),
+        'Fluxlabs\\Assessment\\Tools\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/lib-asq-tools/src',
+        ),
     );
 
     public static $classMap = array (
@@ -94,6 +102,7 @@ class ComposerStaticInit2a52a98ea715a92eceb245f9b2b53954
         'Composer\\Autoload\\ComposerStaticInit5318e757d5da5bfcd5d31c364243d4ec' => __DIR__ . '/../..' . '/lib-cqrs/vendor/composer/autoload_static.php',
         'Composer\\Autoload\\ComposerStaticInitbe295a3e8d49c0364ae2bbc005130ee3' => __DIR__ . '/../..' . '/lib-asq/vendor/composer/autoload_static.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Fluxlabs\\Assessment\\Tools\\DIC\\CtrlTrait' => __DIR__ . '/../..' . '/lib-asq-tools/src/DIC/CtrlTrait.php',
         'Ramsey\\Collection\\AbstractArray' => __DIR__ . '/../..' . '/lib-asq/vendor/ramsey/collection/src/AbstractArray.php',
         'Ramsey\\Collection\\AbstractCollection' => __DIR__ . '/../..' . '/lib-asq/vendor/ramsey/collection/src/AbstractCollection.php',
         'Ramsey\\Collection\\AbstractSet' => __DIR__ . '/../..' . '/lib-asq/vendor/ramsey/collection/src/AbstractSet.php',

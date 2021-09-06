@@ -10,3 +10,6 @@
 [submodule "lib-asq-pool"]
 	path = lib-asq-pool
 	url = ../AsqPool.git
+[submodule "lib-asq-tools"]
+	path = lib-asq-tools
+	url = ../AsqTools.git

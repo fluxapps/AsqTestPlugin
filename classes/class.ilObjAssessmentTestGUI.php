@@ -1,23 +1,13 @@
 <?php
 
+use Fluxlabs\Assessment\Test\Leipzig\LeipzigTest;
 use ILIAS\Data\UUID\Factory;
-use srag\asq\Test\Domain\Test\Modules\IQuestionSourceModule;
-use srag\asq\Test\Leipzig\LeipzigTest;
-use srag\asq\Test\Lib\Event\IEventUser;
 use srag\DIC\AssessmentTest\DICTrait;
 use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
 use srag\asq\Application\Service\ASQDIC;
 use srag\asq\Infrastructure\Persistence\QuestionType;
 use srag\asq\Infrastructure\Setup\lang\SetupAsqLanguages;
 use srag\asq\Infrastructure\Setup\sql\SetupDatabase;
-use srag\asq\Test\AsqTestServices;
-use srag\asq\Test\Application\TestRunner\TestRunnerService;
-use srag\asq\Test\Domain\Result\Model\AssessmentResultContext;
-use srag\asq\Test\Domain\Test\Model\AssessmentTestDto;
-use srag\asq\Test\Infrastructure\Setup\lang\SetupAsqTestLanguages;
-use srag\asq\Test\Infrastructure\Setup\sql\SetupAsqTestDatabase;
-use srag\asq\Test\UI\ConfigurationGUI;
-use srag\asq\Test\Domain\Test\Model\TestData;
 
 /**
  * Class ilObjAssessmentTestGUI
@@ -62,13 +52,9 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
     const COL_EDITLINK = "QUESTION_EDITLINK";
     const VAL_NO_TITLE = '-----';
 
-    private AssessmentTestDto $test_data;
-
     private LeipzigTest $test;
 
     private Factory $uuid_factory;
-
-    private AsqTestServices $asq_test;
 
     /**
      * @inheritDoc
@@ -80,7 +66,6 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
         ASQDIC::initiateASQ($DIC);
 
         $this->uuid_factory = new Factory();
-        $this->asq_test = AsqTestServices::get();
 
         $this->loadTest();
     }
@@ -99,8 +84,6 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
         else {
             $this->test = LeipzigTest::load($this->uuid_factory->fromString($raw_test_id));
         }
-
-
     }
 
     private function createNewTest() : void
@@ -203,146 +186,6 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
     public function afterSave(/*ilObjAssessmentTest*/ ilObject $a_new_object)/*: void*/
     {
         parent::afterSave($a_new_object);
-    }
-
-
-    /**
-     *
-     */
-    protected function showTest()/*: void*/
-    {
-        $srv = new TestRunnerService();
-
-        $context_uid = $srv->createTestRun(
-            new AssessmentResultContext(self::dic()->user()->getId(), 'testrun'),
-            array_map(function ($question) {
-                return $question->getId();
-            }, $this->section->getItems())
-        );
-
-        self::dic()->ctrl()->setParameterByClass(TestPlayerGUI::class, TestPlayerGUI::PARAM_CURRENT_RESULT, $context_uid->toString());
-        self::dic()->ctrl()->redirectToURL(
-            self::dic()->ctrl()->getLinkTargetByClass(TestPlayerGUI::class, TestPlayerGUI::CMD_RUN_TEST, "", false, false)
-        );
-    }
-
-
-    /**
-     *
-     */
-    protected function showQuestions()/*: void*/
-    {
-        global $ASQDIC;
-
-        self::dic()->tabs()->activateTab(self::TAB_QUESTIONS);
-
-        $button = ilLinkButton::getInstance();
-        $button->setUrl(self::dic()->ctrl()->getLinkTargetByClass(self::class, self::CMD_INIT_ASQ));
-        $button->setCaption("Init ASQ", false);
-        self::dic()->toolbar()->addButtonInstance($button);
-
-        $button = ilLinkButton::getInstance();
-        $button->setUrl(self::dic()->ctrl()->getLinkTargetByClass(self::class, self::CMD_CLEAR_ASQ));
-        $button->setCaption("Clear ASQ", false);
-        self::dic()->toolbar()->addButtonInstance($button);
-
-        $question_table = new ilTable2GUI($this);
-        $question_table->setRowTemplate("tpl.questions_row.html", "Customizing/global/plugins/Services/Repository/RepositoryObject/AssessmentTest");
-        $question_table->addColumn(self::plugin()->translate("header_title"), self::COL_TITLE);
-        $question_table->addColumn(self::plugin()->translate("header_type"), self::COL_TYPE);
-        $question_table->addColumn(self::plugin()->translate("header_creator"), self::COL_AUTHOR);
-
-        $question_table->setData($this->getQuestionsOfContainerAsAssocArray());
-
-        $this->show($question_table->getHTML());
-    }
-
-    private function getQuestionsOfContainerAsAssocArray() : array
-    {
-        return [];
-        global $ASQDIC;
-
-        $assoc_array = [];
-
-        $items = $this->section->getItems();
-
-        if (is_null($items)) {
-            return $assoc_array;
-        }
-
-        foreach ($items as $item) {
-            $question_dto = $ASQDIC->asq()->question()->getQuestionByQuestionId($item->getId());
-
-            $data = $question_dto->getData();
-
-            $question_array[self::COL_TITLE] = is_null($data) ? self::VAL_NO_TITLE : (empty($data->getTitle()) ? self::VAL_NO_TITLE : $data->getTitle());
-            $question_array[self::COL_TYPE] = self::dic()->language()->txt($question_dto->getType()->getTitleKey());
-            $question_array[self::COL_AUTHOR] = is_null($data) ? '' : $data->getAuthor();
-            $question_array[self::COL_EDITLINK] = $ASQDIC->asq()->link()->getEditLink($question_dto->getId())->getAction();
-
-            $assoc_array[] = $question_array;
-        }
-
-        return $assoc_array;
-    }
-
-    protected function initASQ()
-    {
-        QuestionType::resetDB();
-        SetupDatabase::new()->run();
-        SetupAsqLanguages::new()->run();
-        SetupAsqTestDatabase::run();
-        SetupAsqTestLanguages::new()->run();
-
-        $this->showQuestions();
-    }
-
-    protected function clearASQ()
-    {
-        global $DIC;
-
-        //resetup asq for question types
-        SetupDatabase::new()->uninstall();
-        SetupDatabase::new()->run();
-        SetupAsqLanguages::new()->run();
-
-        foreach($this->section->getItems() as $item) {
-            $this->asq_test->removeQuestion($this->section->getId(), $item->getId());
-        }
-
-        $DIC->ctrl()->redirectToURL($DIC->ctrl()->getLinkTarget($this, self::CMD_SHOW_QUESTIONS, "", false, false));
-    }
-
-    /**
-     *
-     */
-    protected function settings()/*: void*/
-    {
-
-        self::dic()->tabs()->activateTab(self::TAB_SETTINGS);
-
-        $form = new ConfigurationGUI($this->test_data);
-
-        $subtabs = $form->getSubTabs();
-        foreach ($subtabs as $key => $value) {
-            self::dic()->ctrl()->setParameter($this, ConfigurationGUI::CURRENT_CONFIG, $key);
-            self::dic()->tabs()->addSubTab(
-                 $key,
-                 $value,
-                 self::dic()->ctrl()->getLinkTarget($this, self::CMD_SETTINGS));
-        }
-
-        $current_subtab = $_GET[ConfigurationGUI::CURRENT_CONFIG] ?? array_key_first($subtabs);
-        if ($current_subtab !== null) {
-            self::dic()->tabs()->activateSubTab($current_subtab);
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->test_data = $form->getEditedTest();
-            $this->asq_test->test()->saveTest($this->test_data);
-        }
-
-        self::output()->output($form->render($current_subtab));
     }
 
     /**

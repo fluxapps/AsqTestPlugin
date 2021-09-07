@@ -6,7 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'srag\\asq\\Test\\' => array($baseDir . '/lib-asq-test/src'),
     'srag\\asq\\QuestionPool\\' => array($baseDir . '/lib-asq-pool/src'),
     'srag\\asq\\' => array($baseDir . '/lib-asq/src'),
     'srag\\RemovePluginDataConfirm\\AssessmentTest\\' => array($vendorDir . '/srag/removeplugindataconfirm/src'),
@@ -17,4 +16,5 @@ return array(
     'srag\\CQRS\\' => array($baseDir . '/lib-cqrs/src'),
     'srag\\ActiveRecordConfig\\AssessmentTest\\' => array($vendorDir . '/srag/activerecordconfig/src'),
     'Fluxlabs\\Assessment\\Tools\\' => array($baseDir . '/lib-asq-tools/src'),
+    'Fluxlabs\\Assessment\\Test\\' => array($baseDir . '/lib-asq-test/src'),
 );

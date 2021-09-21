@@ -13,8 +13,8 @@ return array(
     'srag\\LibrariesNamespaceChanger\\' => array($vendorDir . '/srag/librariesnamespacechanger/src'),
     'srag\\DIC\\AssessmentTest\\' => array($vendorDir . '/srag/dic/src'),
     'srag\\CustomInputGUIs\\AssessmentTest\\' => array($vendorDir . '/srag/custominputguis/src'),
-    'srag\\CQRS\\' => array($baseDir . '/lib-cqrs/src'),
     'srag\\ActiveRecordConfig\\AssessmentTest\\' => array($vendorDir . '/srag/activerecordconfig/src'),
+    'Fluxlabs\\CQRS\\' => array($baseDir . '/lib-cqrs/src'),
     'Fluxlabs\\Assessment\\Tools\\' => array($baseDir . '/lib-asq-tools/src'),
     'Fluxlabs\\Assessment\\Test\\' => array($baseDir . '/lib-asq-test/src'),
 );

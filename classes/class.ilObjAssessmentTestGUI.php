@@ -1,7 +1,9 @@
 <?php
 
 use Fluxlabs\Assessment\Test\Leipzig\LeipzigTest;
+use Fluxlabs\Assessment\Tools\Domain\ILIASReference;
 use ILIAS\Data\UUID\Factory;
+use ILIAS\Data\UUID\Uuid;
 use srag\DIC\AssessmentTest\DICTrait;
 use srag\Plugins\AssessmentTest\Utils\AssessmentTestTrait;
 use srag\asq\Application\Service\ASQDIC;
@@ -82,7 +84,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
             $this->createNewTest();
         }
         else {
-            $this->test = LeipzigTest::load($this->uuid_factory->fromString($raw_test_id));
+            $this->test = LeipzigTest::load($this->createReference($this->uuid_factory->fromString($raw_test_id)));
         }
     }
 
@@ -92,7 +94,12 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
         $this->object->setData($test_id->toString());
         $this->object->doUpdate();
 
-        $this->test = LeipzigTest::create($test_id, $this->object->getTitle(), $this->object->getDescription());
+        $this->test = LeipzigTest::create($this->createReference($test_id), $this->object->getTitle(), $this->object->getDescription());
+    }
+
+    private function createReference(Uuid $id) : ILIASReference
+    {
+        return new ILIASReference($id, $this->object->getType(), $this->object_id);
     }
 
     /**

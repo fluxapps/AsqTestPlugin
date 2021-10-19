@@ -37,7 +37,6 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
     const CMD_SHOW_QUESTIONS = "showQuestions";
     const CMD_PERMISSIONS = "perm";
     const CMD_SETTINGS = "settings";
-    const CMD_SHOW_CONTENTS = "showTest";
     const CMD_INIT_ASQ = "initASQ";
     const CMD_CLEAR_ASQ = "clearASQ";
 
@@ -123,7 +122,6 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
                 return;
             default:
                 switch ($cmd) {
-                    case self::CMD_SHOW_CONTENTS:
                     case self::CMD_SHOW_QUESTIONS:
                     case self::CMD_SETTINGS:
                     case self::CMD_INIT_ASQ:

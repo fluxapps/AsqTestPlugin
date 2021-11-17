@@ -166,8 +166,8 @@ It exists the follow datatypes:
 | TYPE_INTEGER   | integer    |
 | TYPE_DOUBLE    | double     |
 | TYPE_BOOLEAN   | bool       |
-| TYPE_TIMESTAMP | integer    |
-| TYPE_DATETIME  | ilDateTime |
+| TYPE_TIMESTAMP | integer     |
+| TYPE_DATETIME  | DateTimeImmutable |
 | TYPE_JSON      | mixed      |
 
 ### Requirements

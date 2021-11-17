@@ -12,7 +12,6 @@ return array(
     'srag\\Plugins\\AssessmentTest\\' => array($baseDir . '/src'),
     'srag\\LibrariesNamespaceChanger\\' => array($vendorDir . '/srag/librariesnamespacechanger/src'),
     'srag\\DIC\\AssessmentTest\\' => array($vendorDir . '/srag/dic/src'),
-    'srag\\CustomInputGUIs\\AssessmentTest\\' => array($vendorDir . '/srag/custominputguis/src'),
     'srag\\ActiveRecordConfig\\AssessmentTest\\' => array($vendorDir . '/srag/activerecordconfig/src'),
     'Fluxlabs\\CQRS\\' => array($baseDir . '/lib-cqrs/src'),
     'Fluxlabs\\Assessment\\Tools\\' => array($baseDir . '/lib-asq-tools/src'),

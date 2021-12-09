@@ -1,12 +1,10 @@
-GENERAL
-	- value object interface
-
-UI
-    - table control
-    - move markup to asq
+ASQ
+    - empty answers for Formula Questions
 
 ARCHITECTURE
     - inject ASQ into $DIC
-    - create trait for translations, ctrl and other generic references
     - use static generator functions
     - test storage modules
+
+TEST
+    - Statistics

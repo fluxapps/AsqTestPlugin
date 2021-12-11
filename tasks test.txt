@@ -5,6 +5,6 @@ ARCHITECTURE
     - inject ASQ into $DIC
     - use static generator functions
     - test storage modules
-
+    - sane module initialization (dont initialize everything on startup)
 TEST
     - Statistics

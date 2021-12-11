@@ -34,24 +34,6 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
     use DICTrait;
     use AssessmentTestTrait;
     const PLUGIN_CLASS_NAME = ilAssessmentTestPlugin::class;
-    const CMD_SHOW_QUESTIONS = "showQuestions";
-    const CMD_PERMISSIONS = "perm";
-    const CMD_SETTINGS = "settings";
-    const CMD_INIT_ASQ = "initASQ";
-    const CMD_CLEAR_ASQ = "clearASQ";
-
-    const LANG_MODULE_OBJECT = "object";
-    const LANG_MODULE_SETTINGS = "settings";
-    const TAB_CONTENTS = "contents";
-    const TAB_PERMISSIONS = "perm_settings";
-    const TAB_SETTINGS = "settings";
-    const TAB_QUESTIONS = "questions";
-
-    const COL_TITLE = 'QUESTION_TITLE';
-    const COL_TYPE = 'QUESTION_TYPE';
-    const COL_AUTHOR = 'QUESTION_AUTHOR';
-    const COL_EDITLINK = "QUESTION_EDITLINK";
-    const VAL_NO_TITLE = '-----';
 
     private LeipzigTest $test;
 
@@ -111,36 +93,8 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
 
     public function performCommand(string $cmd)/*: void*/
     {
-        self::dic()->help()->setScreenIdComponent(ilAssessmentTestPlugin::PLUGIN_ID);
-
-        $next_class = self::dic()->ctrl()->getNextClass($this);
-
-        switch (strtolower($next_class)) {
-            case strtolower(TestPlayerGUI::class):
-                self::dic()->tabs()->activateTab(self::TAB_CONTENTS);
-                self::dic()->ctrl()->forwardCommand(new TestPlayerGUI());
-                return;
-            default:
-                switch ($cmd) {
-                    case self::CMD_SHOW_QUESTIONS:
-                    case self::CMD_SETTINGS:
-                    case self::CMD_INIT_ASQ:
-                    case self::CMD_CLEAR_ASQ:
-                        // Write commands
-                        if (!ilObjAssessmentTestAccess::hasWriteAccess()) {
-                            ilObjAssessmentTestAccess::redirectNonAccess($this);
-                        }
-
-                        $this->{$cmd}();
-                        break;
-
-                    default:
-                        $this->test->executeCommand($cmd);
-                        $this->show();
-                        break;
-                }
-                break;
-        }
+        $this->test->executeCommand($cmd);
+        $this->show();
     }
 
     /**
@@ -194,47 +148,12 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
     }
 
     /**
-     *
-     */
-    protected function setTabs()/*: void*/
-    {
-        return;
-
-        self::dic()->tabs()->addTab(self::TAB_CONTENTS, self::plugin()->translate("show_contents", self::LANG_MODULE_OBJECT), self::dic()->ctrl()
-            ->getLinkTarget($this, self::CMD_SHOW_CONTENTS));
-
-        if (ilObjAssessmentTestAccess::hasWriteAccess()) {
-            self::dic()->tabs()->addTab(self::TAB_QUESTIONS, self::plugin()->translate("questions", self::LANG_MODULE_OBJECT), self::dic()
-                ->ctrl()->getLinkTarget($this, self::CMD_SHOW_QUESTIONS));
-
-            self::dic()->tabs()->addTab(self::TAB_SETTINGS, self::plugin()->translate("settings", self::LANG_MODULE_SETTINGS), self::dic()->ctrl()
-                ->getLinkTarget($this, self::CMD_SETTINGS));
-        }
-
-        if (ilObjAssessmentTestAccess::hasEditPermissionAccess()) {
-            self::dic()->tabs()->addTab(self::TAB_PERMISSIONS, self::plugin()->translate(self::TAB_PERMISSIONS, "", [], false), self::dic()->ctrl()
-                ->getLinkTargetByClass([
-                    self::class,
-                    ilPermissionGUI::class
-                ], self::CMD_PERMISSIONS));
-        }
-
-        self::dic()->tabs()->manual_activation = true; // Show all tabs as links when no activation
-    }
-
-
-    /**
      * @return string
      */
     public static function getStartCmd() : string
     {
-        if (ilObjAssessmentTestAccess::hasWriteAccess()) {
-            return LeipzigTest::getInitialCommand();
-        } else {
-            return self::CMD_SHOW_CONTENTS;
-        }
+        return LeipzigTest::getInitialCommand();
     }
-
 
     /**
      * @inheritDoc

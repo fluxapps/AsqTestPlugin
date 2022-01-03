@@ -34,6 +34,7 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
     use DICTrait;
     use AssessmentTestTrait;
     const PLUGIN_CLASS_NAME = ilAssessmentTestPlugin::class;
+    const LANG_MODULE_OBJECT = "object";
 
     private LeipzigTest $test;
 

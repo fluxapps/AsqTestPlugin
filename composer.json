@@ -38,7 +38,6 @@
 			"classes/",
 			"lib-asq/classes/",
 			"lib-asq/vendor/",
-			"lib-asq-test/classes",
 			"lib-cqrs/vendor/"
 		]
 	},

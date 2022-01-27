@@ -98,6 +98,11 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
         $this->show();
     }
 
+    protected function setTabs()
+    {
+
+    }
+    
     /**
      * @param string $html
      */

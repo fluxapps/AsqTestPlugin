@@ -76,12 +76,21 @@ class ilObjAssessmentTestGUI extends ilObjectPluginGUI
         $this->object->setData($test_id->toString());
         $this->object->doUpdate();
 
-        $this->test = LeipzigTest::create($this->createReference($test_id), $this->object->getTitle(), $this->object->getDescription());
+        $this->test = LeipzigTest::create(
+            $this->createReference($test_id),
+            $this->object->getTitle(),
+            $this->object->getDescription()
+        );
     }
 
     private function createReference(Uuid $id) : ILIASReference
     {
-        return new ILIASReference($id, $this->object->getType(), $this->object_id);
+        return new ILIASReference(
+            $id,
+            $this->object->getType(),
+            $this->object_id,
+            self::assessmentTest()->objectSettings()->getObjectSettingsById($this->object_id)
+        );
     }
 
     /**

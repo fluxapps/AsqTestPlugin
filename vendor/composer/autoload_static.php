@@ -219,6 +219,7 @@ class ComposerStaticInit2a52a98ea715a92eceb245f9b2b53954
         'Fluxlabs\\Assessment\\Test\\Modules\\Questions\\Selection\\Random\\RandomQuestionSelectionObject' => __DIR__ . '/../..' . '/lib-asq-test/src/Modules/Questions/Selection/Random/RandomQuestionSelectionObject.php',
         'Fluxlabs\\Assessment\\Test\\Modules\\Questions\\Selection\\Random\\RandomSelectionProcessor' => __DIR__ . '/../..' . '/lib-asq-test/src/Modules/Questions/Selection/Random/RandomSelectionProcessor.php',
         'Fluxlabs\\Assessment\\Test\\Modules\\Questions\\Selection\\Random\\RandomSelectionQuestion' => __DIR__ . '/../..' . '/lib-asq-test/src/Modules/Questions/Selection/Random/RandomSelectionQuestion.php',
+        'Fluxlabs\\Assessment\\Test\\Modules\\Questions\\Selection\\SelectionChosenEvent' => __DIR__ . '/../..' . '/lib-asq-test/src/Modules/Questions/Selection/SelectionChosenEvent.php',
         'Fluxlabs\\Assessment\\Test\\Modules\\Questions\\Sources\\AbstractQuestionSource' => __DIR__ . '/../..' . '/lib-asq-test/src/Modules/Questions/Sources/AbstractQuestionSource.php',
         'Fluxlabs\\Assessment\\Test\\Modules\\Questions\\Sources\\Fixed\\FixedSource' => __DIR__ . '/../..' . '/lib-asq-test/src/Modules/Questions/Sources/Fixed/FixedSource.php',
         'Fluxlabs\\Assessment\\Test\\Modules\\Questions\\Sources\\Pool\\QuestionPoolSelection' => __DIR__ . '/../..' . '/lib-asq-test/src/Modules/Questions/Sources/Pool/QuestionPoolSelection.php',

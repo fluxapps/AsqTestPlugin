@@ -156,6 +156,7 @@ return array(
     'Fluxlabs\\Assessment\\Test\\Modules\\Questions\\Selection\\Random\\RandomQuestionSelectionObject' => $baseDir . '/lib-asq-test/src/Modules/Questions/Selection/Random/RandomQuestionSelectionObject.php',
     'Fluxlabs\\Assessment\\Test\\Modules\\Questions\\Selection\\Random\\RandomSelectionProcessor' => $baseDir . '/lib-asq-test/src/Modules/Questions/Selection/Random/RandomSelectionProcessor.php',
     'Fluxlabs\\Assessment\\Test\\Modules\\Questions\\Selection\\Random\\RandomSelectionQuestion' => $baseDir . '/lib-asq-test/src/Modules/Questions/Selection/Random/RandomSelectionQuestion.php',
+    'Fluxlabs\\Assessment\\Test\\Modules\\Questions\\Selection\\SelectionChosenEvent' => $baseDir . '/lib-asq-test/src/Modules/Questions/Selection/SelectionChosenEvent.php',
     'Fluxlabs\\Assessment\\Test\\Modules\\Questions\\Sources\\AbstractQuestionSource' => $baseDir . '/lib-asq-test/src/Modules/Questions/Sources/AbstractQuestionSource.php',
     'Fluxlabs\\Assessment\\Test\\Modules\\Questions\\Sources\\Fixed\\FixedSource' => $baseDir . '/lib-asq-test/src/Modules/Questions/Sources/Fixed/FixedSource.php',
     'Fluxlabs\\Assessment\\Test\\Modules\\Questions\\Sources\\Pool\\QuestionPoolSelection' => $baseDir . '/lib-asq-test/src/Modules/Questions/Sources/Pool/QuestionPoolSelection.php',
